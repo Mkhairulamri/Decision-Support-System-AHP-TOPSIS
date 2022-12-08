@@ -67,10 +67,15 @@
                                 <tr>
                                     <th style="width: 10px;">#</th>
                                     <th>Kriteria 1</th>
+                                    <th>Guru BK</th>
+                                    @if (Auth()->user()->role == 1)
+                                        <th>Admin PPDB</th>
+                                    @endif
                                     <th>Kriteria 2</th>
-                                    <th>Nilai</th>
-                                    {{-- <th>Bobot</th> --}}
-                                    <th style="width: 20%;">Aksi</th>
+                                    @if (Auth()->user()->role == 1)
+                                        <th>Bobot</th>
+                                    @endif
+                                    <th class="d-flex justify-content-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,11 +86,40 @@
                                 <tr>
                                     <td>{{$no++}}</td>
                                     <td>{{$item->kriteria1}}</td>
-                                    <td>{{$item->kriteria2}}</td>
-                                    <td>{{$item->nilai}}</td>
-                                    {{-- <td>{{$kriteria->bobot}}</td> --}}
                                     <td>
-                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$item->id}}">Edit</button>
+                                        @if ($item->gurubk == null)
+                                            0
+                                        @elseif($item->gurubk != null)
+                                            {{$item->gurubk}}
+                                        @endif
+                                    </td>
+                                    @if (Auth()->user()->role == 1)
+                                        <td>
+                                            @if ($item->panitia == null)
+                                                0
+                                            @elseif($item->panitia != null)
+                                                {{$item->panitia}}
+                                            @endif
+                                        </td>
+                                    @endif
+                                    <td>{{$item->kriteria2}}</td>
+                                    @if (Auth()->user()->role == 1)
+                                        <td>
+                                            {{-- {{$item->nilai}} --}}
+                                            {{($item->gurubk + $item->panitia)/2}}
+                                        </td>
+                                    @endif
+                                    {{-- <td>{{$kriteria->bobot}}</td> --}}
+                                    <td class="d-flex align-items-center justify-content-center">
+
+                                        @php
+                                        $edit = gettype((($item->gurubk+$item->panitia)/2))
+                                        @endphp
+                                            <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$item->id}}">Edit</button>
+                                        @if ($edit == 'integer')
+                                        @elseif($edit == 'double')
+                                            {{-- <span class="badge badge-danger">Edit di Inversnya</span> --}}
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -103,13 +137,25 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Kriteria Penilaian</h5>
+                <h5 class="modal-title">Tambah Kriteria Penilaian -
+                    @if (Auth()->user()->role == 1)
+                        Panitia
+                    @elseif(Auth()->user()->role == 2)
+                        Guru BK
+                    @endif
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="needs-validation" novalidate="" action="{{route('SimpanBobot')}}" method="POST">
+                <form class="needs-validation" novalidate=""
+                    @if (Auth()->user()->role == 1)
+                        action="{{route('SimpanBobotPanitia')}}"
+                    @elseif(Auth()->user()->role == 2)
+                        action="{{route('SimpanBobotGuru')}}"
+                    @endif
+                    method="POST">
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group row">
@@ -124,6 +170,23 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Nilai</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" aria-label=".form-control example" name="bobot">
+                                    <option selected>Intensitas kepentingan</option>
+                                    <option value="1">1 - Sama Penting dengan</option>
+                                    <option value="2">2 - Berdekatan dengan</option>
+                                    <option value="3">3 - Sedikit Lebih Penting Dari</option>
+                                    <option value="4">4 - Berdekatan dengan</option>
+                                    <option value="5">5 - Lebih Penting Dari</option>
+                                    <option value="6">6 - Berdekatan dengan</option>
+                                    <option value="7">7 - Jelas Lebih Mutlak Dari</option>
+                                    <option value="8">8 - Berdekatan dengan</option>
+                                    <option value="9">9 - Mutlak Lebih Penting Dari</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Kriteria 2</label>
                             <div class="col-sm-9">
                                 <select class="form-control select2" style="width: 100%;" aria-label="Default select example" name="kriteria2">
@@ -134,17 +197,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Bobot Rata-Rata</label>
-                            <div class="col-sm-9">
-                                <input type="number" class="form-control" style="width: 100%;" aria-label="Default select example" name="bobot">
-                            </div>
-                        </div>
                         <input type="hidden" name="hallo" value="Hallo">
 
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Simpan Kriteria</button>
+                        <button type="submit" class="btn btn-primary">Simpan Bobot Kepentingan</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     </div>
                 </form>
@@ -161,13 +218,18 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Panitia PPDB</h5>
+                <h5 class="modal-title">Edit Data Matriks Bobot - Panitia</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="needs-validation" novalidate="" action="{{route('UpdateBobot',$item->id)}}" method="POST">
+                <form class="needs-validation" novalidate=""
+                    @if (Auth()->user()->role == 1)
+                        action="{{route('UpdateBobotPanitia',$item->id)}}"
+                    @elseif(Auth()->user()->role == 2)
+                        action="{{route('UpdateBobotGuru',$item->id)}}"
+                    @endif method="POST">
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group row">
@@ -185,6 +247,60 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Nilai</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" aria-label=".form-control example" name="bobot">
+                                    <option>Intensitas kepentingan</option>
+                                    <option value="1"
+                                        @if ($item->panitia == 1)
+                                            selected
+                                        @endif
+                                    >1 - Sama Penting dengan</option>
+                                    <option value="2"
+                                        @if ($item->panitia == 2 || $item->panitia == 2 )
+                                            selected
+                                        @endif
+                                    >2 - Berdekatan dengan</option>
+                                    <option value="3"
+                                        @if ($item->panitia == 3)
+                                            selected
+                                        @endif
+                                    >3 - Sedikit Lebih Penting Dari</option>
+                                    <option value="2"
+                                        @if ($item->panitia == 4)
+                                            selected
+                                        @endif
+                                    >4 - Berdekatan dengan</option>
+                                    <option value="5"
+                                        @if ($item->panitia == 5)
+                                            selected
+                                        @endif
+                                    >5 - Lebih Penting Dari</option>
+                                    <option value="6"
+                                        @if ($item->panitia == 6)
+                                            selected
+                                        @endif
+                                    >6 - Berdekatan dengan</option>
+                                    <option value="7"
+                                        @if ($item->panitia == 7)
+                                            selected
+                                        @endif
+                                    >7 - Jelas Lebih Mutlak Dari</option>
+                                    <option value="8"
+                                        @if ($item->panitia == 8)
+                                            selected
+                                        @endif
+                                    >8 - Berdekatan dengan</option>
+
+                                    <option value="9"
+                                        @if ($item->panitia == 9)
+                                            selected
+                                        @endif
+                                    >9 - Mutlak Lebih Penting Dari</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Kriteria 2</label>
                             <div class="col-sm-9">
                                 <select class="form-control select2" style="width: 100%;" aria-label="Default select example" name="kriteria2">
@@ -198,15 +314,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Bobot Rata-Rata</label>
-                            <div class="col-sm-9">
-                                <input type="number" class="form-control" style="width: 100%;" aria-label="Default select example" name="bobot" value="{{$item->nilai}}">
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Simpan Kriteria</button>
+                        <button type="submit" class="btn btn-primary">Simpan Bobot Kepentingan</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     </div>
                 </form>

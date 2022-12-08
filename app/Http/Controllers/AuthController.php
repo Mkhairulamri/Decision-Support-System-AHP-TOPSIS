@@ -12,10 +12,10 @@ class AuthController extends Controller
 
             $req->session()->regenerate();
 
-            if(Auth()->user()->role==1){
+            if(Auth()->user()->role == 2 ){
                 // dd(Auth());
-                return redirect()->route('IndexGuru');
-            }else if(Auth()->user()->role == 2){
+                return redirect()->route('DashboardGuru');
+            }else if(Auth()->user()->role == 1){
                 return redirect()->route('IndexPanitia');
             }else{
                 return back()->with('gagal','Email atau Password anda Salah');

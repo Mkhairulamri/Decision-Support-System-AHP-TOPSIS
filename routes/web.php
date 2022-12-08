@@ -5,8 +5,9 @@ use App\Http\Middleware\RoleAccess;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KriteriaController;
-use App\Http\Controllers\SubKriteriaController;
+use App\Http\Controllers\SubNilaiController;
 use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\AlternatifController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,23 +25,18 @@ Route::get('/', function () {
 })->name('index');
 Route::post('/login',[AuthController::class,'Login'])->name('login');
 
-Route::middleware('isGuru')->group(function(){
 
-    //Dashboard
-    Route::get('/dashboard',[UserController::class,'IndexGuru'])->name('IndexGuru');
+Route::middleware('RoleAccess:1'|'RoleAccess:2')->group(function(){
+
+    Route::get('/dashboard-guru',[UserController::class,'IndexGuru'])->name('DashboardGuru');
 
     Route::get('/data-panitia',[UserController::class,'getUser'])->name('DataPanitia');
     Route::post('/save-user',[UserController::class,'SaveUser'])->name('SaveUser');
     Route::post('/update-user/{id}',[UserController::class,'UpdateUser'])->name('UpdateUser');
     Route::get('/user/delete/{id}',[UserController::class,'DeleteUser'])->name('DeleteUser');
 
-    //Logout
 
-});
-
-Route::middleware('isPanitia')->group(function(){
-
-    Route::get('/dashboard',[UserController::class,'DashboardPanitia'])->name('IndexPanitia');
+    Route::get('/dashboard-Panitia',[UserController::class,'DashboardPanitia'])->name('IndexPanitia');
     // kriteria Route
     Route::get('/kriteria',[KriteriaController::class,'Index'])->name('KriteriaIndex');
     Route::post('/kriteria/save',[KriteriaController::class,'SaveKriteria'])->name('SaveKriteria');
@@ -48,10 +44,18 @@ Route::middleware('isPanitia')->group(function(){
     Route::get('/kriteria/delete/{id}',[KriteriaController::class,'DeleteKriteria'])->name('DeleteKriteria');
     Route::get('/kriteria/update-bobot',[KriteriaController::class,'UpdateBobot'])->name('UpdateBobotKriterai');
 
+    //SubNilai Kriteria
+    Route::get('/sub-nilai',[SubNilaiController::class,'index'])->name('SubNilaiIndex');
+    Route::post('/sub-nilai/simpan',[SubNilaiController::class,'Simpan'])->name('SimpanSubNilai');
+    Route::post('/sub-nilai/update/{id}',[SubNilaiController::class,'Update'])->name('UpdateSubNilai');
+    Route::get('/sub-nilai/delete/{id}',[SubNilaiController::class,'Hapus'])->name('HapusSubNilai');
+
     //Matriks Route
     Route::get('/matriks',[KriteriaController::class,'Matriks'])->name('MatriksIndex');
-    Route::post('/simpan-matriks',[KriteriaController::class,'SimpanMatriks'])->name('SimpanBobot');
-    Route::post('/simpan-matriks/{id}',[KriteriaController::class,'UpdateMatriks'])->name('UpdateBobot');
+    Route::post('/simpan-bobot-panitia',[KriteriaController::class,'SimpanMatriksPanitia'])->name('SimpanBobotPanitia');
+    Route::post('/simpan-matriks-guru',[KriteriaController::class,'SimpanMatriksGuru'])->name('SimpanBobotGuru');
+    Route::post('/simpan-matriks-panitia/{id}',[KriteriaController::class,'UpdateMatriksPanitia'])->name('UpdateBobotPanitia');
+    Route::post('/simpan-matriks-guru/{id}',[KriteriaController::class,'UpdateMatriksGuru'])->name('UpdateBobotGuru');
     Route::get('/delete-matriks/{id}',[KriteriaController::class,'DeleteMatriks'])->name('DeleteMatriks');
     Route::get('/matriks-view',[KriteriaController::class,'MatriksView'])->name('Matriks');
     Route::get('/matriks/bobot-simpan',[KriteriaController::class,'SimpanBobotKriteria'])->name('SimpanBobotKriteria');
@@ -66,6 +70,8 @@ Route::middleware('isPanitia')->group(function(){
     Route::get('/alternatif',function(){
         return view('Mix/Alternatif');
     })->name('AlternatifIndex');
+    Route::post('/alternatif/tambah',[AlternatifController::class,'Tambah'])->name('TambahAlternatif');
+    Route::post('/alternatif/simpan',[AlternatifController::class,'Simpan'])->name('SimpanAlternatif');
 
 });
 

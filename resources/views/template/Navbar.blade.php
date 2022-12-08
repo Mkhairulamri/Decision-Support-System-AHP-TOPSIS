@@ -60,10 +60,10 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          @if(Auth()->user()->role == 1)
+          @if(Auth()->user()->role == 2)
           <li class="nav-item">
-            <a href="" class="nav-link
-            @if(Route::current()->getName() == 'Guru')
+            <a href="{{route('IndexPanitia')}}" class="nav-link
+            @if(Route::current()->getName() == 'DashboardGuru')
             active
             @endif
             ">
@@ -73,7 +73,7 @@
               </p>
             </a>
           </li>
-        @elseif(Auth()->user()->role == 2)
+        @elseif(Auth()->user()->role == 1)
           <li class="nav-item">
             <a href="{{route('IndexPanitia')}}" class="nav-link
             @if(Route::current()->getName() == 'IndexPanitia')
@@ -89,7 +89,7 @@
           </li>
         @endif
 
-        @if(Auth()->user()->role == 1)
+        {{-- @if(Auth()->user()->role == 1)
           <li class="nav-item">
             <a href="{{route('DataPanitia')}}" class="nav-link
             @if(Route::current()->getName() == 'DataPanitia')
@@ -102,16 +102,16 @@
               </p>
             </a>
           </li>
-        @endif
+        @endif --}}
 
-        @if(Auth()->user()->role == 2)
+        @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
         <li class="nav-item
-        @if(Route::current()->getName() === 'KriteriaIndex' || Route::current()->getName() == 'NilaiKriteria')
+        @if(Route::current()->getName() === 'KriteriaIndex' || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks')
             menu-open
         @endif
         ">
             <a href="#" class="nav-link
-            @if(Route::current()->getName() == 'KriteriaIndex'  || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'NilaiKriteria')
+            @if(Route::current()->getName() == 'KriteriaIndex'  || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks')
                 active
             @endif
             ">
@@ -124,7 +124,7 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route('KriteriaIndex')}}" class="nav-link
-                @if(Route::current()->getName() == 'KriteriaIndex' || Route::current()->getName() == 'MatriksIndex')
+                @if(Route::current()->getName() == 'KriteriaIndex')
                 active
                 @endif
                 ">
@@ -133,13 +133,33 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{route('SubNilaiIndex')}}" class="nav-link
+                @if(Route::current()->getName() == 'SubNilaiIndex')
+                active
+                @endif
+                ">
+                <i class="fas fa-tags nav-icon"></i>
+                  <p>Sub Nilai Kriteria</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{route('MatriksIndex')}}" class="nav-link
                 @if(Route::current()->getName() == 'MatriksIndex')
                     active
                 @endif
                 ">
+                  <i class="fas fa-paste nav-icon"></i>
+                  <p>Perbandingan AHP</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('Matriks')}}" class="nav-link
+                @if(Route::current()->getName() == 'Matriks')
+                    active
+                @endif
+                ">
                     <i class="fas fa-th nav-icon"></i>
-                  <p>Matriks Kriteria</p>
+                  <p>Penghitungan AHP</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -148,7 +168,7 @@
                     active
                 @endif
                 ">
-                  <i class="fas fa-paste nav-icon"></i>
+                    <i class="fas fa-list nav-icon"></i>
                   <p>Nilai Kriteria</p>
                 </a>
               </li>
@@ -157,11 +177,11 @@
         @endif
 
 
-        <li class="nav-header">Pemilihan Juruan</li>
+        <li class="nav-header">Penghitungan Alternatif</li>
           @if(Auth()->user()->role == 1 || Auth()->user()->role == 2)
           <li class="nav-item">
             <a href="{{route('AlternatifIndex')}}" class="nav-link
-            @if(Route::current()->getName() == 'AlternatifIndex')
+            @if(Route::current()->getName() == 'AlternatifIndex' || Route::current()->getName() == 'TambahAlternatif')
             active
             @endif
             ">
@@ -172,38 +192,57 @@
             </a>
           </li>
         @endif
-        @if(Auth()->user()->role == 1)
-          <li class="nav-item">
-            <a href="" class="nav-link
-            @if(Route::current()->getName() == 'RekomendasiJurusan')
-            active
+        @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
+        <li class="nav-item
+        @if(Route::current()->getName() === '' || Route::current()->getName() == '' || Route::current()->getName() == '')
+            menu-open
+        @endif
+        ">
+            <a href="#" class="nav-link
+            @if(Route::current()->getName() == ''  || Route::current()->getName() == '' || Route::current()->getName() == '')
+                active
             @endif
             ">
-                <i class="nav-icon fas fa-users-cog"></i>
+            <i class="nav-icon fas fa-th"></i>
               <p>
-                Rekomendasi Jurusan
+                TOPSIS
+                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="" class="nav-link
+                @if(Route::current()->getName() == 'KriteriaIndex')
+                active
+                @endif
+                ">
+                <i class="fas fa-filter nav-icon"></i>
+                  <p>Normalisasi</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('MatriksIndex')}}" class="nav-link
+                @if(Route::current()->getName() == 'MatriksIndex')
+                    active
+                @endif
+                ">
+                  <i class="fas fa-paste nav-icon"></i>
+                  <p>Solusi Ideal</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('Matriks')}}" class="nav-link
+                @if(Route::current()->getName() == 'Matriks')
+                    active
+                @endif
+                ">
+                    <i class="fas fa-th nav-icon"></i>
+                  <p>Preferensi</p>
+                </a>
+              </li>
+            </ul>
           </li>
         @endif
-
-          <li class="nav-item">
-            <a href="pages/calendar.html" class="nav-link">
-              <i class="nav-icon fas fa-calendar-alt"></i>
-              <p>
-                Alternatif
-                <span class="badge badge-info right">2</span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{route('AlternatifIndex')}}" class="nav-link">
-              <i class="nav-icon far fa-image"></i>
-              <p>
-                Data Siswa
-              </p>
-            </a>
-          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

@@ -44,15 +44,16 @@ class NilaiController extends Controller
                 "Maaf Data yang Anda Inputkan Telah tersedia di Database"
             );
         } else {
-            if ($req->nilai1 <= $req->nilai2) {
+            if ($req->nilai1 != null && $req->nilai1 != null && $req->nilai1 >= $req->nilai2) {
                 return back()->with(
                     "exist",
                     "Maaf Nilai Deskripsi yang anda Inputkan Tidak Valid"
                 );
-            } else {
+            }else if($req->nilai1 ==null && $req->nilai2 == null){
                 $nilai = new NilaiKriteria();
                 $nilai->kriteria = $req->kriteria;
-                $nilai->deskripsi = $req->deskripsi;
+                $nilai->nilai1 = $req->nilai1;
+                $nilai->nilai2 = $req->nilai2;
                 $nilai->bobot = $req->bobot;
                 $nilai->nilai_kriteria = $req->nilai;
 
@@ -65,6 +66,8 @@ class NilaiController extends Controller
                 } catch (QueryException $err) {
                     return back()->with("error", $err);
                 }
+            }else{
+
             }
         }
     }
@@ -75,7 +78,8 @@ class NilaiController extends Controller
 
         $exist = NilaiKriteria::where("kriteria", $req->kriteria)
             ->where("id", $id)
-            ->where("deskripsi", $req->deskripsi)
+            ->where("nilai1", $req->nilai1)
+            ->where("nilai2", $req->nilai2)
             ->where("bobot", $req->bobot)
             ->where("nilai_kriteria", $req->nilai)
             ->first();
@@ -88,20 +92,28 @@ class NilaiController extends Controller
                 "Maaf data Yang Inputkan Sama dengan Data sebelumnya"
             );
         } else {
-            $nilai = NilaiKriteria::findOrFail($id);
-            $nilai->kriteria = $req->kriteria;
-            $nilai->deskripsi = $req->deskripsi;
-            $nilai->bobot = $req->bobot;
-            $nilai->nilai_kriteria = $req->nilai;
-
-            try {
-                $nilai->save();
+            if($req->nilai1 != null && $req->nilai2!= null && $req->nilai1 >= $req->nilai2){
                 return back()->with(
-                    "sukses",
-                    "Data Nilai Kriteria Berhasil DiUpdate"
+                    "exist",
+                    "Maaf data Yang Inputkan Tidak Valid"
                 );
-            } catch (QueryException $err) {
-                return back()->with("error", $err);
+            }else{
+                $nilai = NilaiKriteria::findOrFail($id);
+                $nilai->kriteria = $req->kriteria;
+                $nilai->nilai1 = $req->nilai1;
+                $nilai->nilai2 = $req->nilai2;
+                $nilai->bobot = $req->bobot;
+                $nilai->nilai_kriteria = $req->nilai;
+
+                try {
+                    $nilai->save();
+                    return back()->with(
+                        "sukses",
+                        "Data Nilai Kriteria Berhasil DiUpdate"
+                    );
+                } catch (QueryException $err) {
+                    return back()->with("error", $err);
+                }
             }
         }
     }

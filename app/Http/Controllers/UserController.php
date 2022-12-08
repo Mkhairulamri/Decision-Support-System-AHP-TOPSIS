@@ -18,6 +18,15 @@ class UserController extends Controller
         return view('PanitiaPPDB/Dashboard',['kriteria'=>$kriteria]);
     }
 
+    function IndexGuru(){
+
+        $kriteria = count(Kriteria::get());
+
+        // dd($kriteria);
+
+        return view('GuruBK/index',['kriteria'=>$kriteria]);
+    }
+
     function getUser(){
 
         $user = User::get()->where('role',2)->sortBy('name');

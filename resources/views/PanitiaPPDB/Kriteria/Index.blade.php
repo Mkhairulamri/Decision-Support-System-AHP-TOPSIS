@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data Panitia PPDB</h1>
+                <h1 class="m-0">Data Kriteria Penilaian</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -26,8 +26,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Kriteria</h3>
-                        <button class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#tambah_kriteria"><i class="fas fa-plus"></i>Tambah Kriteria</button>
+                        @if (auth()->user()->role == 1)
+                            <h3 class="card-title">Data Kriteria</h3>
+                            <button class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#tambah_kriteria"><i class="fas fa-plus"></i>Tambah Kriteria</button>
+                        @endif
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -69,7 +71,9 @@
                                     <th>Nama Kriteria</th>
                                     <th>Atribut</th>
                                     <th>Bobot</th>
-                                    <th style="width: 20%;">Aksi</th>
+                                    @if (auth()->user()->role == 1)
+                                        <th style="width: 20%;">Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,18 +83,20 @@
                                     <td>{{$no++}}</td>
                                     <td>{{$kriteria->kode_kriteria}}</td>
                                     <td>{{$kriteria->nama_kriteria}}</td>
-                                    <td>{{$kriteria->atribut}}</td>
+                                    <td>{{$kriteria->atribut}} -- {{$kriteria->value}}</td>
                                     <td>{{$kriteria->bobot}}</td>
+                                    @if (auth()->user()->role == 1)
                                     <td>
                                         <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$kriteria->id}}">Edit</button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$kriteria->id}}">Hapus</button>
                                     </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4"></td>
+                                    <td colspan="4">Jumlah</td>
                                     @php
                                         $jumlah = 0;
 
@@ -99,7 +105,10 @@
                                         }
                                     @endphp
                                     <td>{{$jumlah}}</td>
-                                    <td>Aksi</td>
+
+                                    @if (auth()->user()->role == 1)
+                                        <td>Aksi</td>
+                                    @endif
                                 </tr>
                             </tfoot>
                         </table>
@@ -159,6 +168,24 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Value</label>
+                            <div class="row mt-2 ml-2">
+                                <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="value" id="flexRadioDefault1" value="Cost"/>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Angka
+                                    </label>
+                                </div>
+                                <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="value" id="flexRadioDefault2" value="Pilihan" />
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Pilihan
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Simpan Kriteria</button>
@@ -228,6 +255,33 @@
                                 </div>
                             </div>
                         </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Value</label>
+                                    <div class="row mt-2 ml-2">
+                                        <div class="form-check col">
+                                            <input class="form-check-input" type="radio" name="value" id="flexRadioDefault1" value="Angka"
+                                            @if ($kriteria->value == 'Angka')
+                                                checked
+                                            @endif
+                                            />
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Angka
+                                            </label>
+                                        </div>
+                                        <div class="form-check col">
+                                            <input class="form-check-input" type="radio" name="value" id="flexRadioDefault2" value="Pilihan"
+                                            @if ($kriteria->value == 'Pilihan')
+                                                checked
+                                            @endif
+                                            />
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Pilihan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Update Kriteria</button>

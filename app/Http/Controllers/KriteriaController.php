@@ -22,6 +22,7 @@ class KriteriaController extends Controller
         $kriteria->kode_kriteria = strtoupper($req->kode);
         $kriteria->nama_kriteria = ucfirst($req->nama);
         $kriteria->atribut = $req->atribut;
+        $kriteria->value = $req->value;
 
         try{
             $kriteria->save();
@@ -39,6 +40,7 @@ class KriteriaController extends Controller
         $kriteria->kode_kriteria = strtoupper($req->kode);
         $kriteria->nama_kriteria = ucfirst($req->nama);
         $kriteria->atribut = $req->atribut;
+        $kriteria->value = $req->value;
 
         try{
             $kriteria->update();
@@ -66,7 +68,9 @@ class KriteriaController extends Controller
     function Matriks(){
 
         $kriteria = Kriteria::get()->sortBy('kode_kriteria');
-        $matriks = Matriks::orderBy('kriteria1')->orderBy('kriteria2')->get();
+        $matriks = Matriks::orderBy('kriteria1')
+                            ->orderBy('kriteria2')
+                            ->get();
 
         // dd($matriks);
 
@@ -76,7 +80,7 @@ class KriteriaController extends Controller
         ]);
     }
 
-    function SimpanMatriks(Request $req){
+    function SimpanMatriksPanitia(Request $req){
 
         $check = Matriks::where('kriteria1','=',$req->kriteria1)
                         ->where('kriteria2','=',$req->kriteria2)
@@ -94,14 +98,55 @@ class KriteriaController extends Controller
             $matriks1 = new Matriks;
             $matriks1->kriteria1 = $req->kriteria1;
             $matriks1->kriteria2 = $req->kriteria2;
-            $matriks1->nilai = $value;
+            $matriks1->panitia = $value;
 
             $matriks2 = new Matriks;
 
             if($req->kriteria1 != $req->kriteria2){
                 $matriks2->kriteria1 = $req->kriteria2;
                 $matriks2->kriteria2 = $req->kriteria1;
-                $matriks2->nilai = $value2;
+                $matriks2->panitia = $value2;
+            }
+
+            try{
+                $matriks1->save();
+                if($req->kriteria1 != $req->kriteria2){
+                    $matriks2->save();
+                }
+                return back()->with('sukses', 'Data Matriks Berhasil Ditambahkan');
+            }catch(QueryException $err){
+                return back()->with('failed', 'Data Matriks Gagal Ditambahkan');
+            }
+        }else{
+            return back()->with('failed','Data Matriks Sudah Ada');
+        }
+    }
+    function SimpanMatriksGuru(Request $req){
+
+        $check = Matriks::where('kriteria1','=',$req->kriteria1)
+                        ->where('kriteria2','=',$req->kriteria2)
+                        ->first();
+
+        // dd($req->all());
+
+        if($check === null){
+            $kriteria1 = $req->bobot;
+            $kriteria2 = 1;
+
+            $value = round($kriteria1/$kriteria2,2);
+            $value2 = round($kriteria2/$kriteria1,2);
+
+            $matriks1 = new Matriks;
+            $matriks1->kriteria1 = $req->kriteria1;
+            $matriks1->kriteria2 = $req->kriteria2;
+            $matriks1->gurubk = $value;
+
+            $matriks2 = new Matriks;
+
+            if($req->kriteria1 != $req->kriteria2){
+                $matriks2->kriteria1 = $req->kriteria2;
+                $matriks2->kriteria2 = $req->kriteria1;
+                $matriks2->gurubk = $value2;
             }
 
             try{
@@ -118,16 +163,23 @@ class KriteriaController extends Controller
         }
     }
 
-    function UpdateMatriks(Request $req, $id){
+
+    function UpdateMatriksPanitia(Request $req, $id){
 
         //Nilai matriks Orde 1
         $kriteria1 = $req->bobot;
         $kriteria2 = 1;
 
+        // print($kriteria1);
+
         // dd($req->all());
 
         $value = $kriteria1/$kriteria2;
         $value2 = $kriteria2/$kriteria1;
+
+        print($value." == ".$value2);
+
+        // dd();
 
         $id2 = Matriks::where('kriteria1',$req->kriteria2)
                         ->where('kriteria2',$req->kriteria1)
@@ -136,19 +188,73 @@ class KriteriaController extends Controller
         $matriks1 = Matriks::findOrFail($id);
         $matriks1->kriteria1 = $req->kriteria1;
         $matriks1->kriteria2 = $req->kriteria2;
-        $matriks1->nilai = round($value,2);
+        $matriks1->panitia = round($value,2);
 
         $id2 = Matriks::where('kriteria1',$req->kriteria2)
                         ->where('kriteria2',$req->kriteria1)
-                        ->delete();
-        $matriks2 = new Matriks;
+                        ->select('id')
+                        ->first();
+
+        $matriks2 = Matriks::findOrFail($id2->id);
         $matriks2->kriteria1 = $req->kriteria2;
         $matriks2->kriteria2 = $req->kriteria1;
-        $matriks2->nilai = round($value2,2);
+        $matriks2->panitia = round($value2,2);
+
+        // dd($matriks2);
 
         try{
             $matriks1->update();
-            $matriks2->save();
+            $matriks2->update();
+            // $matriks2->save();
+            // UpdateMatriks2($matriks2);
+            return back()->with('sukses', 'Data Matriks  Berhasil DiUpdate');
+        }catch(QueryException $err){
+            return back()->with('failed', 'Data Matriks Gagal DiUpdate');
+        }
+    }
+    function UpdateMatriksGuru(Request $req, $id){
+
+        //Nilai matriks Orde 1
+
+        $kriteria1 = $req->bobot;
+        $kriteria2 = 1;
+
+        // print($kriteria1);
+
+        // dd($req->all());
+
+        $value = $kriteria1/$kriteria2;
+        $value2 = $kriteria2/$kriteria1;
+
+        // print($value." == ".$value2);
+
+        // dd();
+
+        $id2 = Matriks::where('kriteria1',$req->kriteria2)
+                        ->where('kriteria2',$req->kriteria1)
+                        ->get();
+
+        $matriks1 = Matriks::findOrFail($id);
+        $matriks1->kriteria1 = $req->kriteria1;
+        $matriks1->kriteria2 = $req->kriteria2;
+        $matriks1->gurubk = round($value,2);
+
+        $id2 = Matriks::where('kriteria1',$req->kriteria2)
+                        ->where('kriteria2',$req->kriteria1)
+                        ->select('id')
+                        ->first();
+
+        $matriks2 = Matriks::findOrFail($id2->id);
+        $matriks2->kriteria1 = $req->kriteria2;
+        $matriks2->kriteria2 = $req->kriteria1;
+        $matriks2->gurubk = round($value2,2);
+
+        // dd($matriks2);
+
+        try{
+            $matriks1->update();
+            $matriks2->update();
+            // $matriks2->save();
             // UpdateMatriks2($matriks2);
             return back()->with('sukses', 'Data Matriks  Berhasil DiUpdate');
         }catch(QueryException $err){
@@ -178,8 +284,9 @@ class KriteriaController extends Controller
         foreach ($kriteria as $k) {
             $matriks[$k->kode_kriteria] = [];
             foreach ($kriteria as $kr) {
-                $nilai = $bobot->where('kriteria1', $k->kode_kriteria)->where('kriteria2', $kr->kode_kriteria)->first()->nilai;
-                $matriks[$k->kode_kriteria][$kr->kode_kriteria] = $nilai;
+                $nilai1 = $bobot->where('kriteria1', $k->kode_kriteria)->where('kriteria2', $kr->kode_kriteria)->first()->panitia;
+                $nilai2 = $bobot->where('kriteria1', $k->kode_kriteria)->where('kriteria2', $kr->kode_kriteria)->first()->gurubk;
+                $matriks[$k->kode_kriteria][$kr->kode_kriteria] = ($nilai1+$nilai2)/2;
             }
         }
         return $matriks;
@@ -275,7 +382,7 @@ class KriteriaController extends Controller
                 $columns[] = $record->kriteria2;
             }
 
-            $rows[$record->kriteria1][$record->kriteria2] = $record->nilai;
+            $rows[$record->kriteria1][$record->kriteria2] = ($record->panitia+$record->gurubk)/2;
         }
 
         $normalisasi = $this->normalisasi();

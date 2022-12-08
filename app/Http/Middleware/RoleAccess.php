@@ -18,12 +18,9 @@ class RoleAccess
     {
         $roles = array_slice(func_get_args(),2);
 
-        foreach($roles as $role){
-            if(auth()->check() && auth()->user()->role){
-                return $next($request);
-            }
+        if(auth()->check()){
+            return $next($request);
         }
-
-        return back();
+        return redirect()->route('index');
     }
 }

@@ -8,7 +8,7 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sistem Pemilihan Jurusan MAN 2 Kuantan Singngi</p>
+      <p class="login-box-msg">Sistem Pemilihan Jurusan MAN 2 Kuantan Singingi</p>
       @if ($message = Session::get('gagal'))
         <p class="text-danger fs-6 justify text-center">{{$message}}</p>
       @endif
@@ -48,9 +48,6 @@
         <p>- Atau -</p>
         <p class="mb-1">
             <a href="forgot-password.html">Lupa Password</a>
-        </p>
-        <p class="mb-0">
-            <a href="register.html" class="text-center">Register a new membership</a>
         </p>
       </div>
       <!-- /.social-auth-links -->

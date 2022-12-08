@@ -83,13 +83,13 @@
                                     <td>{{$no++}}</td>
                                     <td>{{$dt->nama_kriteria}}</td>
                                     <td>
-                                        @if ($dt->deskripsi == null)
+                                        @if ($dt->nilai1 == null && $dt->nilai2 == null)
                                             -
                                         @else
-                                            {{$dt->deskripsi}}
+                                            {{$dt->nilai1}} - {{$dt->nilai2}}
                                         @endif
                                     </td>
-                                    <td>{{$dt->nilai_kriteria}}</td>
+                                    <td style="text-transform:capitalize">{{$dt->nilai_kriteria}}</td>
                                     <td>{{$dt->bobot}}</td>
                                     <td>
                                         <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$dt->id}}">Edit</button>
@@ -142,9 +142,6 @@
                             <div class="col">
                                 <input type="number" class="form-control" name="nilai2" placeholder="Nilai2"/>
                             </div>
-                            <div class="error">
-
-                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Nilai Kriteria</label>
@@ -158,8 +155,8 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Bobot Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" required="" name="bobot"/>
-                                <div class="invalid-feedback" placeholder="Bobot Kriteria">
+                                <input type="number" class="form-control" required="" name="bobot" placeholder="Bobot Kriteria"/>
+                                <div class="invalid-feedback" >
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
                             </div>
@@ -209,8 +206,14 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Deskripsi</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" name="deskripsi" style="text-transform:uppercase" value="{{$d->deskripsi}}"/>
+                            <div class="col-sm">
+                                <input type="number" class="form-control" name="nilai1" placeholder="Nilai2" value="{{$d->nilai1}}"/>
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control" name="nilai2" placeholder="Nilai2" value="{{$d->nilai2}}"/>
+                            </div>
+                            <div class="error">
+
                             </div>
                         </div>
                         <div class="form-group row">
@@ -282,4 +285,8 @@
         "ordering": true,
         "info": true,
         "autoWidth": false,
- 
+        "responsive": true,
+      });
+    });
+
+  </script>

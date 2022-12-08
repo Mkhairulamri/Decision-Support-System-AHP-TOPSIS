@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Matriks extends Model
+class subnilai extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'kriteria1',
-        'kriteria2',
-        'gurubk',
-        'panitia',
-        'nilai'
+        'kriteria',
+        'nama_sub_nilai'
     ];
 }
