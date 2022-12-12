@@ -185,7 +185,14 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="form-group row">
+                            <div class="offset-sm-3 col-sm-10">
+                              <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck2" name="guru">
+                                <label class="form-check-label" for="exampleCheck2">Diinputkan Oleh Guru</label>
+                              </div>
+                            </div>
+                          </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Simpan Kriteria</button>

@@ -16,13 +16,22 @@ class KriteriaController extends Controller
     }
 
     function SaveKriteria(Request $req){
-        // dd($req->all());
+        // dd($req->guru);
+
+        $guru = 0;
+
+        if($req->guru == null){
+            $guru = 0;
+        }elseif($req->guru != null){
+            $guru = 1;
+        }
 
         $kriteria = new Kriteria;
         $kriteria->kode_kriteria = strtoupper($req->kode);
         $kriteria->nama_kriteria = ucfirst($req->nama);
         $kriteria->atribut = $req->atribut;
         $kriteria->value = $req->value;
+        $kriteria->is_guru = $guru;
 
         try{
             $kriteria->save();
@@ -121,6 +130,7 @@ class KriteriaController extends Controller
             return back()->with('failed','Data Matriks Sudah Ada');
         }
     }
+
     function SimpanMatriksGuru(Request $req){
 
         $check = Matriks::where('kriteria1','=',$req->kriteria1)
@@ -212,6 +222,7 @@ class KriteriaController extends Controller
             return back()->with('failed', 'Data Matriks Gagal DiUpdate');
         }
     }
+
     function UpdateMatriksGuru(Request $req, $id){
 
         //Nilai matriks Orde 1
@@ -370,36 +381,43 @@ class KriteriaController extends Controller
             ->orderBy('kriteria1')
             ->get();
 
-        $rows = [];
-        $columns = [];
+        $kriteria = Kriteria::get();
 
-        foreach ($records as $index => $record) {
-            if (!isset($rows[$record->kriteria1])) {
-                $rows[$record->kriteria1] = [];
+        $jumlah = pow(count($kriteria),2);
+
+        if($jumlah == count($records)){
+            $rows = [];
+            $columns = [];
+
+            foreach ($records as $index => $record) {
+                if (!isset($rows[$record->kriteria1])) {
+                    $rows[$record->kriteria1] = [];
+                }
+
+                if (!in_array($record->kriteria2, $columns)) {
+                    $columns[] = $record->kriteria2;
+                }
+
+                $rows[$record->kriteria1][$record->kriteria2] = ($record->panitia+$record->gurubk)/2;
             }
 
-            if (!in_array($record->kriteria2, $columns)) {
-                $columns[] = $record->kriteria2;
-            }
+            $normalisasi = $this->normalisasi();
+            $prioritas = $this->prioritas();
+            $bobot = $this->BobotKriteria();
+            $kriteria = Kriteria::orderBy('kode_kriteria')->get();
 
-            $rows[$record->kriteria1][$record->kriteria2] = ($record->panitia+$record->gurubk)/2;
+            return view('PanitiaPPDB/Kriteria/Matriks/MatriksView', [
+                'rows' => $rows,
+                'columns' => $columns,
+                'normalisasi' => $normalisasi,
+                'prioritas' => $prioritas,
+                'bobotKriteria' =>$bobot,
+                'kriteria' =>$kriteria
+            ]);
+        }else{
+            return redirect()->route('MatriksIndex')->with('failed','Matriks Perbandingan belum lengkap, Silahkan Isi data Matriks Perbandingan Terlebih dahulu');
         }
 
-        $normalisasi = $this->normalisasi();
-        $prioritas = $this->prioritas();
-        $bobot = $this->BobotKriteria();
-        $kriteria = Kriteria::orderBy('kode_kriteria')->get();
-
-        // dd($bobot);
-
-        return view('PanitiaPPDB/Kriteria/Matriks/MatriksView', [
-            'rows' => $rows,
-            'columns' => $columns,
-            'normalisasi' => $normalisasi,
-            'prioritas' => $prioritas,
-            'bobotKriteria' =>$bobot,
-            'kriteria' =>$kriteria
-        ]);
     }
 
     function SimpanBobotKriteria(){
@@ -417,11 +435,8 @@ class KriteriaController extends Controller
             foreach($data as $d){
                 $bobot = round($d['bobot'],9);
                 $kriteria = Kriteria::where('kode_kriteria',$d['kode'])
-                            // ->geT();
                             ->update(['bobot'=>$bobot]);
-                            // print($bobot." === ");
             }
-            // dd($data);
             if($kriteria){
                 return redirect()->route('KriteriaIndex')->with('sukses', 'Bobot Kriteria Berhasil DiUpdate');
             }else{
@@ -431,6 +446,5 @@ class KriteriaController extends Controller
         }catch(QueryException $err){
             return back()->with('failed', 'Data Matriks Gagal DiUpdate');
         }
-        // dd($data);
     }
 }

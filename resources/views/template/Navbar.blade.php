@@ -106,12 +106,12 @@
 
         @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
         <li class="nav-item
-        @if(Route::current()->getName() === 'KriteriaIndex' || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks')
+        @if(Route::current()->getName() === 'KriteriaIndex' || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks' || Route::current()->getName() === 'SubNilaiIndex')
             menu-open
         @endif
         ">
             <a href="#" class="nav-link
-            @if(Route::current()->getName() == 'KriteriaIndex'  || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks')
+            @if(Route::current()->getName() == 'KriteriaIndex'  || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks' || Route::current()->getName() === 'SubNilaiIndex')
                 active
             @endif
             ">
@@ -194,12 +194,12 @@
         @endif
         @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
         <li class="nav-item
-        @if(Route::current()->getName() === '' || Route::current()->getName() == '' || Route::current()->getName() == '')
+        @if(Route::current()->getName() === 'alternatifSS' || Route::current()->getName() == '' || Route::current()->getName() == '')
             menu-open
         @endif
         ">
             <a href="#" class="nav-link
-            @if(Route::current()->getName() == ''  || Route::current()->getName() == '' || Route::current()->getName() == '')
+            @if(Route::current()->getName() == 'alternatifSS'  || Route::current()->getName() == '' || Route::current()->getName() == '')
                 active
             @endif
             ">
@@ -211,8 +211,8 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="" class="nav-link
-                @if(Route::current()->getName() == 'KriteriaIndex')
+                <a href="{{route('alternatifSS')}}" class="nav-link
+                @if(Route::current()->getName() == 'alternatifSS')
                 active
                 @endif
                 ">
@@ -231,8 +231,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('Matriks')}}" class="nav-link
-                @if(Route::current()->getName() == 'Matriks')
+                <a href="{{route('Preferensi')}}" class="nav-link
+                @if(Route::current()->getName() == 'Preferensi')
                     active
                 @endif
                 ">

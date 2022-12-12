@@ -73,6 +73,14 @@ Route::middleware('RoleAccess:1'|'RoleAccess:2')->group(function(){
     Route::post('/alternatif/tambah',[AlternatifController::class,'Tambah'])->name('TambahAlternatif');
     Route::post('/alternatif/simpan',[AlternatifController::class,'Simpan'])->name('SimpanAlternatif');
 
+    Route::get('/normalisasi', function(){
+        return view('Mix/UntukSS/NormalisasiSS');
+    })->name('alternatifSS');
+
+    Route::get('/preferensi', function(){
+        return view('Mix/UntukSS/Preferensi');
+    })->name('Preferensi');
+
 });
 
 

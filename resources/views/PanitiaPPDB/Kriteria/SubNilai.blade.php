@@ -65,6 +65,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 10px;">#</th>
+                                    <th>Kode Sub Nilai</th>
                                     <th>Nama Sub Nilai Kriteria</th>
                                     <th>Nama Kriteria</th>
                                     <th style="width: 20%;">Aksi</th>
@@ -78,6 +79,7 @@
                                 @foreach ($subnilai as $sn)
                                 <tr>
                                     <td>{{$no++}}</td>
+                                    <td>{{$sn->kode_subnilai}}</td>
                                     <td class="text-capitalize">{{$sn->nama_sub_nilai}}</td>
                                     <td>{{$sn->kriteria}}</td>
                                     <td>
@@ -110,9 +112,18 @@
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Kode Sub Nilai</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control text-uppercase" required="" name="kode"/>
+                                <div class="invalid-feedback">
+                                    Maaf Form Tidak Boleh Kosong
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Nama Sub Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" required="" name="nama"/>
+                                <input type="text" class="form-control text-capitalize" required="" name="nama"/>
                                 <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
@@ -155,6 +166,15 @@
                 <form class="needs-validation" novalidate="" action="{{route('UpdateSubNilai',$sn->id)}}" method="POST">
                     {{ csrf_field() }}
                     <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Kode Sub Kriteria</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control text-uppercase" required="" name="kode" value="{{$sn->kode_subnilai}}"/>
+                                <div class="invalid-feedback" >
+                                    Maaf Form Tidak Boleh Kosong
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Nama Sub Kriteria</label>
                             <div class="col-sm-9">

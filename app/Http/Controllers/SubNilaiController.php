@@ -14,6 +14,7 @@ class SubNilaiController extends Controller
                     ->sortBy('kode_kriteria');
 
         $subNilai = subnilai::get()
+                    ->sortBy('kriteria')
                     ->sortBy('nama_sub_nilai');
                     // ->join('kriterias.nama_kriteria','subnilais.kriteria','=','kriterias.id');
 
@@ -30,6 +31,7 @@ class SubNilaiController extends Controller
 
         $subnilai = new subnilai;
         $subnilai->nama_sub_nilai = $req->nama;
+        $subnilai->kode_subnilai = strtoupper($req->kode);
         $subnilai->kriteria = $req->kriteria;
 
         try{
@@ -38,6 +40,36 @@ class SubNilaiController extends Controller
             return back()->with('sukses','Data Sub Nilai Berhasil Ditambahkan');
         }catch(Excetion $err){
             return back()->with('error','Data Gagal DiTambahkan'.$err);
+        }
+    }
+
+    function Update(Request $req,$id){
+        // dd($req->all());
+
+        $subnilai = subnilai::findOrFail($id);
+        $subnilai->nama_sub_nilai = $req->nama;
+        $subnilai->kode_subnilai = strtoupper($req->kode);
+        $subnilai->kriteria = $req->kriteria;
+
+        try{
+            $subnilai->update();
+
+            return back()->with('sukses','Data Sub Nilai Berhasil DiUbah');
+        }catch(Excetion $err){
+            return back()->with('error','Data Gagal DiUbah'.$err);
+        }
+    }
+
+    function Hapus($id){
+        $subnilai = subnilai::findOrFail($id);
+
+
+        try{
+            $subnilai->delete();
+
+            return back()->with('sukses','Data Sub Nilai Berhasil DiHapus');
+        }catch(Excetion $err){
+            return back()->with('error','Data Gagal Dihapus'.$err);
         }
     }
 }
