@@ -36,8 +36,8 @@ class KriteriaController extends Controller
         try{
             $kriteria->save();
             return back()->with('sukses', 'Data Kriteria Penilaian Berhasil Ditambahkan');
-        }catch(QueryException $err){
-            Session::flash('Failed',$err);
+        }catch(\Exception $err){
+            // SSession::flash('Failed',$err);
             // print($err);
             return back()->with('failed', 'Data Kriteria Penilaian Gagal Ditambahkan');
         }
@@ -54,7 +54,7 @@ class KriteriaController extends Controller
         try{
             $kriteria->update();
             return back()->with('sukses', 'Data Kriteria Penilaian Berhasil DiUpdate');
-        }catch(QueryException $err){
+        }catch(\Exception $err){
             // Session::flash('Failed',$err);
             // print($err);
             return back()->with('failed', 'Data Kriteria Penilaian Gagal Ditambahkan');
@@ -67,7 +67,7 @@ class KriteriaController extends Controller
         try{
             $kriteria->delete();
             return back()->with('sukses', 'Data Kriteria Penilaian Berhasil DiHapus');
-        }catch(QueryException $err){
+        }catch(\Exception $err){
             // Session::flash('Failed',$err);
             // print($err);
             return back()->with('failed', 'Data Kriteria Penilaian Gagal Dihapus');
@@ -123,7 +123,7 @@ class KriteriaController extends Controller
                     $matriks2->save();
                 }
                 return back()->with('sukses', 'Data Matriks Berhasil Ditambahkan');
-            }catch(QueryException $err){
+            }catch(\Exception $err){
                 return back()->with('failed', 'Data Matriks Gagal Ditambahkan');
             }
         }else{
@@ -165,7 +165,7 @@ class KriteriaController extends Controller
                     $matriks2->save();
                 }
                 return back()->with('sukses', 'Data Matriks Berhasil Ditambahkan');
-            }catch(QueryException $err){
+            }catch(\Exception $err){
                 return back()->with('failed', 'Data Matriks Gagal Ditambahkan');
             }
         }else{
@@ -218,7 +218,7 @@ class KriteriaController extends Controller
             // $matriks2->save();
             // UpdateMatriks2($matriks2);
             return back()->with('sukses', 'Data Matriks  Berhasil DiUpdate');
-        }catch(QueryException $err){
+        }catch(\Exception $err){
             return back()->with('failed', 'Data Matriks Gagal DiUpdate');
         }
     }
@@ -268,7 +268,7 @@ class KriteriaController extends Controller
             // $matriks2->save();
             // UpdateMatriks2($matriks2);
             return back()->with('sukses', 'Data Matriks  Berhasil DiUpdate');
-        }catch(QueryException $err){
+        }catch(\Exception $err){
             return back()->with('failed', 'Data Matriks Gagal DiUpdate');
         }
     }
@@ -300,7 +300,9 @@ class KriteriaController extends Controller
                 $matriks[$k->kode_kriteria][$kr->kode_kriteria] = ($nilai1+$nilai2)/2;
             }
         }
+
         return $matriks;
+
     }
 
     function jumlah(){
@@ -443,7 +445,7 @@ class KriteriaController extends Controller
                 return redirect()->route('KriteriaIndex')->with('gagal', 'Bobot Kriteria Gagal DiUpdate');
 
             }
-        }catch(QueryException $err){
+        }catch(\Exception $err){
             return back()->with('failed', 'Data Matriks Gagal DiUpdate');
         }
     }

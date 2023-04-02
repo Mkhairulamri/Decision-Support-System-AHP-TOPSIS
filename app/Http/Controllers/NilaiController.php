@@ -63,7 +63,7 @@ class NilaiController extends Controller
                         "sukses",
                         "Data Nilai Kriteria Berhasil DiTambahkan"
                     );
-                } catch (QueryException $err) {
+                } catch (\Exception $err) {
                     return back()->with("error", $err);
                 }
             }else{
@@ -111,7 +111,7 @@ class NilaiController extends Controller
                         "sukses",
                         "Data Nilai Kriteria Berhasil DiUpdate"
                     );
-                } catch (QueryException $err) {
+                } catch (\Exception $err) {
                     return back()->with("error", $err);
                 }
             }

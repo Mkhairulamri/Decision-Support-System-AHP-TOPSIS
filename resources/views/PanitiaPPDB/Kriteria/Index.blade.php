@@ -33,7 +33,8 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        {{-- alert --}} @if ($message = Session::get('exist'))
+                        {{-- alert --}}
+                        @if ($message = Session::get('exist'))
                         <div class="alert alert-danger alert-dismissible show fade" role="alert">
                             <div class="alert-body">
                                 <button class="close" data-dismiss="alert">

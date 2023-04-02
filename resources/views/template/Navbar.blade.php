@@ -52,7 +52,6 @@
           <a href="#" class="d-block">{{auth()->user()->name}}</a>
         </div>
       </div>
-
       <!-- SidebarSearch Form -->
 
       <!-- Sidebar Menu -->
@@ -89,29 +88,28 @@
           </li>
         @endif
 
-        {{-- @if(Auth()->user()->role == 1)
-          <li class="nav-item">
-            <a href="{{route('DataPanitia')}}" class="nav-link
-            @if(Route::current()->getName() == 'DataPanitia')
+        <li class="nav-item">
+            <a href="{{route('AlternatifIndex')}}" class="nav-link
+            @if(Route::current()->getName() == 'AlternatifIndex' || Route::current()->getName() == 'TambahAlternatif' || Route::current()->getName() == 'LihatAlternatif')
             active
             @endif
             ">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Data Panitia
+                Data Siswa
               </p>
             </a>
           </li>
-        @endif --}}
 
         @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
         <li class="nav-item
-        @if(Route::current()->getName() === 'KriteriaIndex' || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks' || Route::current()->getName() === 'SubNilaiIndex')
+        @if(Route::current()->getName() === 'KriteriaIndex' || Route::current()->getName() == 'SubNilaiIndex' || Route::current()->getName() == 'NilaiKriteria')
             menu-open
         @endif
         ">
+            {{-- Head Nav Menu --}}
             <a href="#" class="nav-link
-            @if(Route::current()->getName() == 'KriteriaIndex'  || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks' || Route::current()->getName() === 'SubNilaiIndex')
+            @if(Route::current()->getName() == 'KriteriaIndex'  || Route::current()->getName() == 'SubNilaiIndex' || Route::current()->getName() == 'NilaiKriteria')
                 active
             @endif
             ">
@@ -122,6 +120,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+                {{-- Menu Kriteria --}}
               <li class="nav-item">
                 <a href="{{route('KriteriaIndex')}}" class="nav-link
                 @if(Route::current()->getName() == 'KriteriaIndex')
@@ -132,6 +131,7 @@
                   <p>Kriteria</p>
                 </a>
               </li>
+              {{-- Menu Sub Nilai  --}}
               <li class="nav-item">
                 <a href="{{route('SubNilaiIndex')}}" class="nav-link
                 @if(Route::current()->getName() == 'SubNilaiIndex')
@@ -141,15 +141,50 @@
                 <i class="fas fa-tags nav-icon"></i>
                   <p>Sub Nilai Kriteria</p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{route('MatriksIndex')}}" class="nav-link
-                @if(Route::current()->getName() == 'MatriksIndex')
+            </li>
+             {{-- Menu Nilai Kriteria --}}
+             <li class="nav-item">
+                <a href="{{route('NilaiKriteria')}}" class="nav-link
+                @if(Route::current()->getName() == 'NilaiKriteria')
                     active
                 @endif
                 ">
-                  <i class="fas fa-paste nav-icon"></i>
-                  <p>Perbandingan AHP</p>
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>Nilai Kriteria</p>
+                </a>
+            </li>
+
+            </ul>
+          </li>
+        @endif
+
+        <li class="nav-header">Penghitungan</li>
+        @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
+        <li class="nav-item
+        @if(Route::current()->getName() === 'alternatifSS' || Route::current()->getName() == 'Preferensi' || Route::current()->getName() == '' || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks' )
+            menu-open
+        @endif
+        ">
+            <a href="#" class="nav-link
+            @if(Route::current()->getName() == 'alternatifSS'  || Route::current()->getName() == 'Preferensi' || Route::current()->getName() == '' || Route::current()->getName() == 'MatriksIndex' || Route::current()->getName() == 'Matriks' )
+                active
+            @endif
+            ">
+            <i class="nav-icon fas fa-th"></i>
+              <p>
+                AHP
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('MatriksIndex')}}" class="nav-link
+                @if(Route::current()->getName() == 'alternatifSS')
+                active
+                @endif
+                ">
+                <i class="fas fa-filter nav-icon"></i>
+                  <p>Perbandingan</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -158,48 +193,20 @@
                     active
                 @endif
                 ">
-                    <i class="fas fa-th nav-icon"></i>
-                  <p>Penghitungan AHP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{route('NilaiKriteria')}}" class="nav-link
-                @if(Route::current()->getName() == 'NilaiKriteria')
-                    active
-                @endif
-                ">
-                    <i class="fas fa-list nav-icon"></i>
-                  <p>Nilai Kriteria</p>
+                  <i class="fas fa-paste nav-icon"></i>
+                  <p>Matriks AHP</p>
                 </a>
               </li>
             </ul>
           </li>
         @endif
-
-
-        <li class="nav-header">Penghitungan Alternatif</li>
-          @if(Auth()->user()->role == 1 || Auth()->user()->role == 2)
-          <li class="nav-item">
-            <a href="{{route('AlternatifIndex')}}" class="nav-link
-            @if(Route::current()->getName() == 'AlternatifIndex' || Route::current()->getName() == 'TambahAlternatif')
-            active
-            @endif
-            ">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                Data Siswa
-              </p>
-            </a>
-          </li>
-        @endif
-        @if(Auth()->user()->role == 2 || Auth()->user()->role == 1)
         <li class="nav-item
-        @if(Route::current()->getName() === 'alternatifSS' || Route::current()->getName() == '' || Route::current()->getName() == '')
+        @if(Route::current()->getName() === 'alternatifSS' || Route::current()->getName() == 'Preferensi' || Route::current()->getName() == '')
             menu-open
         @endif
         ">
             <a href="#" class="nav-link
-            @if(Route::current()->getName() == 'alternatifSS'  || Route::current()->getName() == '' || Route::current()->getName() == '')
+            @if(Route::current()->getName() == 'alternatifSS'  || Route::current()->getName() == 'Preferensi' || Route::current()->getName() == '')
                 active
             @endif
             ">
@@ -241,8 +248,7 @@
                 </a>
               </li>
             </ul>
-          </li>
-        @endif
+        </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -253,4 +259,4 @@
   <div class="content-wrapper">
 
 
-      @include('template/Footer')
+@include('template/Footer')

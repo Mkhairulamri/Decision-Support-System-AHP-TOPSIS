@@ -20,6 +20,8 @@ class RoleAccess
 
         if(auth()->check()){
             return $next($request);
+        }else{
+            return redirect()->route('index');
         }
         return redirect()->route('index');
     }

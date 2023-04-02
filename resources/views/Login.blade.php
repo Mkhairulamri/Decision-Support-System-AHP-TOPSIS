@@ -12,13 +12,13 @@
       @if ($message = Session::get('gagal'))
         <p class="text-danger fs-6 justify text-center">{{$message}}</p>
       @endif
-      <form action="{{route('login')}}" method="post" novalidate="">
+      <form action="{{route('login')}}" method="post" novalidate="" class="needs-validation">
         {{csrf_field()}}
         <div class="input-group mb-3">
           <input type="text" name="username" class="form-control" placeholder="Username" required="">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-users"></span>
+              <span class="fas fa-users" ></span>
             </div>
           </div>
           <div class="invalid-feedback">
@@ -47,7 +47,7 @@
       <div class="social-auth-links text-center mb-3">
         <p>- Atau -</p>
         <p class="mb-1">
-            <a href="forgot-password.html">Lupa Password</a>
+            <a href="{{route('LupaPassword')}}">Lupa Password</a>
         </p>
       </div>
       <!-- /.social-auth-links -->
@@ -60,4 +60,4 @@
 
 <!-- jQuery -->
 
-@include('template/footer');
+@include('template/footer')

@@ -17,14 +17,7 @@ class CreateAlternatifsTable extends Migration
             $table->id();
             $table->string('nama');
             $table->integer('nisn')->unique();
-            $table->integer('rapor'); //1
-            $table->integer('tpa'); //2
-            $table->integer('prites'); //3
-            $table->string('jurusan'); //4
-            $table->integer('minat');
-            $table->integer('psikologi'); //5
-            $table->integer('wawancara'); //6
-            $table->integer('rekomendasi'); //7
+            $table->json('data');
             $table->timestamps();
         });
     }

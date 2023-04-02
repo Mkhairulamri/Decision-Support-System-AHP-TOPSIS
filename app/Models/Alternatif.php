@@ -12,13 +12,6 @@ class Alternatif extends Model
     protected $fillable = [
         'nama',
         'nisn',
-        'rapor', //1
-        'tpa', //2
-        'prites', //3
-        'jurusan',
-        'minat', //4
-        'psikologi', //5
-        'wawancara', //6
-        'rekomendasi' //7
+        'data'
     ];
 }
