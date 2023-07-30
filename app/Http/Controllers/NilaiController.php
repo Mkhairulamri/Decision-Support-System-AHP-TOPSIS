@@ -17,7 +17,12 @@ class NilaiController extends Controller
             "nilai_kriterias.kriteria"
         )
             ->select("kriterias.nama_kriteria", "nilai_kriterias.*")
-            ->get();
+            ->get()
+            ->sortBy([
+                'kriteria','desc',
+                'bobot','desc'
+            ]);
+            // ->sortBy('bobot');
 
         $kriteria = Kriteria::orderBy("kode_kriteria")->get();
 
@@ -29,7 +34,7 @@ class NilaiController extends Controller
 
     function Simpan(Request $req)
     {
-        // dd($req->all());
+        // dd($req->nilai_kriteria);
 
         $exist = NilaiKriteria::where("kriteria", $req->kriteria)
             ->where("bobot", $req->bobot)
@@ -44,30 +49,41 @@ class NilaiController extends Controller
                 "Maaf Data yang Anda Inputkan Telah tersedia di Database"
             );
         } else {
-            if ($req->nilai1 != null && $req->nilai1 != null && $req->nilai1 >= $req->nilai2) {
+            if ($req->nilai1 != null && $req->nilai2 != null && $req->nilai1 >= $req->nilai2) {
                 return back()->with(
                     "exist",
                     "Maaf Nilai Deskripsi yang anda Inputkan Tidak Valid"
                 );
-            }else if($req->nilai1 ==null && $req->nilai2 == null){
-                $nilai = new NilaiKriteria();
-                $nilai->kriteria = $req->kriteria;
-                $nilai->nilai1 = $req->nilai1;
-                $nilai->nilai2 = $req->nilai2;
-                $nilai->bobot = $req->bobot;
-                $nilai->nilai_kriteria = $req->nilai;
+            }else{
+                if($req->nilai != null){
+                    $nilai = new NilaiKriteria();
+                    $nilai->kriteria = $req->kriteria;
+                    $nilai->nilai1 = $req->nilai1;
+                    $nilai->nilai2 = $req->nilai2;
+                    $nilai->bobot = $req->bobot;
+                    $nilai->nilai_kriteria = $req->nilai;
 
-                try {
                     $nilai->save();
                     return back()->with(
                         "sukses",
                         "Data Nilai Kriteria Berhasil DiTambahkan"
                     );
-                } catch (\Exception $err) {
-                    return back()->with("error", $err);
-                }
-            }else{
 
+                }elseif($req->nilai != null){
+                    $nilai = new NilaiKriteria();
+                    $nilai->kriteria = $req->kriteria;
+                    $nilai->nilai1 = $req->nilai1;
+                    $nilai->nilai2 = $req->nilai2;
+                    $nilai->bobot = $req->bobot;
+                    $nilai->nilai_kriteria = '-';
+
+                    $nilai->save();
+                    return back()->with(
+                        "sukses",
+                        "Data Nilai Kriteria Berhasil DiTambahkan"
+                    );
+
+                }
             }
         }
     }

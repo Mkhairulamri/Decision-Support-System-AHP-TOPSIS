@@ -7,7 +7,7 @@ use App\Models\Alternatif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-
+//-------Tidak Dipakai--------------
 class UserController extends Controller
 {
     function DashboardPanitia(){
@@ -15,7 +15,7 @@ class UserController extends Controller
         $kriteria = count(Kriteria::get());
         $data = count(Alternatif::get());
         $verifikasi = count(Alternatif::where('status',0)->get());
-        $ranking = count(Alternatif::where('ranking',0)->get());
+        $jurusan = count(Alternatif::where('jurusan',null)->get());
 
         // dd($kriteria);
 
@@ -24,7 +24,7 @@ class UserController extends Controller
             'kriteria'=>$kriteria,
             'data' =>$data,
             'verifikasi'=>$verifikasi,
-            'ranking'=>$ranking
+            'jurusan'=>$jurusan
         ]);
     }
 
@@ -105,31 +105,5 @@ class UserController extends Controller
         }catch(\Exception $err){
             return back()->with('failed', 'Pengguna Panitia PPDB Gagal DiHapus');
         }
-    }
-
-    //cari Data Siswa
-    function CariData(Request $req){
-        $cari = $req->search;
-        $type = intval($cari);
-
-        print("<br> Datanya adalah  = ". $cari);
-        print("<br> tipenya adalah  = ". gettype($type));
-
-        print("<br>".$type);
-
-        $data = [];
-
-        if($type == 0){
-            echo    "ini nama bukan NISN";
-            $data = Alternatif::where('nisn',$type)->get();
-        }else if($type == "integer"){
-            echo    "ini NISN";
-            $data = Alternatif::where('nama',$cari)->get();
-        }
-
-        dd($data);
-
-        return view('Guest/HasilSiswa');
-
     }
 }

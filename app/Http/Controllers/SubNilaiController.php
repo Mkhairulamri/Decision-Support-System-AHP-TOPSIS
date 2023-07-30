@@ -14,13 +14,13 @@ class SubNilaiController extends Controller
                     ->sortBy('kode_kriteria');
 
         $subNilai = subnilai::get()
-                    ->sortBy('kriteria')
-                    ->sortBy('nama_sub_nilai');
+                    ->sortBy('kode_subnilai');
+                    // ->sortBy('semester');
                     // ->join('kriterias.nama_kriteria','subnilais.kriteria','=','kriterias.id');
 
         // dd($kriteria);
 
-        return view('PanitiaPPDB/Kriteria/SubNilai',[
+        return view('PanitiaPPDB.Kriteria.SubNilai.SubNilai',[
             'kriteria'=>$kriteria,
             'subnilai' =>$subNilai
         ]);
@@ -38,7 +38,7 @@ class SubNilaiController extends Controller
             $subnilai->save();
 
             return back()->with('sukses','Data Sub Nilai Berhasil Ditambahkan');
-        }catch(Excetion $err){
+        }catch(\Exception $err){
             return back()->with('error','Data Gagal DiTambahkan'.$err);
         }
     }
@@ -55,7 +55,7 @@ class SubNilaiController extends Controller
             $subnilai->update();
 
             return back()->with('sukses','Data Sub Nilai Berhasil DiUbah');
-        }catch(Excetion $err){
+        }catch(\Exception $err){
             return back()->with('error','Data Gagal DiUbah'.$err);
         }
     }
@@ -63,13 +63,13 @@ class SubNilaiController extends Controller
     function Hapus($id){
         $subnilai = subnilai::findOrFail($id);
 
-
         try{
             $subnilai->delete();
 
             return back()->with('sukses','Data Sub Nilai Berhasil DiHapus');
-        }catch(Excetion $err){
+        }catch(\Exception $err){
             return back()->with('error','Data Gagal Dihapus'.$err);
         }
     }
 }
+?>

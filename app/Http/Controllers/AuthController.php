@@ -18,10 +18,10 @@ class AuthController extends Controller
             }else if(Auth()->user()->role == 1){
                 return redirect()->route('IndexPanitia');
             }else{
-                return back()->with('gagal','Email atau Password anda Salah');
+                return back()->with('gagal','Username atau Password anda Salah');
             }
         }else{
-            return back()->with('gagal','Email atau Password anda Salah');
+            return back()->with('gagal','Username atau Password anda Salah');
         }
     }
 

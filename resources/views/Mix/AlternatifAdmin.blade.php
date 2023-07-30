@@ -73,14 +73,6 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>NISN</th>
-                                    {{-- Diinputkan oleh Guru `` is guru = 1 dan role = 2 --}}
-                                        {{-- @foreach ($kriteria as $item)
-                                            @if (Auth()->user()->role == 2 && $item->is_guru == 1)
-                                                <th>{{ $item->nama_kriteria }}</th>
-                                            @elseif(Auth()->user()->role == 1)
-                                                <th>{{ $item->nama_kriteria }}</th>
-                                            @endif
-                                        @endforeach --}}
                                     <th>Validasi GuruBK</th>
                                     <th>Verifikasi Data</th>
                                     <th>Aksi</th>
@@ -91,73 +83,47 @@
                                 $no = 1;
                                 // var_dump($data);
                                 @endphp
-                                @foreach ($data as $key => $dt)
+                                @foreach ($data as $dt)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $dt['nama'] }}</td>
-                                    <td>{{ $dt['nisn'] }}</td>
-                                    @php
-                                    $result = 0;
+                                    <td>{{ $dt->nama }}</td>
+                                    <td>{{ $dt->nisn }}</td>
 
-                                    // foreach ($kriteria as $kr) {
-                                    //     $test = $dt['data'][$kr->kode_kriteria];
-                                    //     if ($dt['status'] == 1) {
-                                    //         if ($dt['data'][$kr->kode_kriteria]) {
-                                    //             $result++;
-                                    //         }
-                                    //     }
-                                    //     // dd($test);
-                                    // }
-                                    // @endphp
-
-                                    @if ($result == 0)
+                                    @if ($dt->C03 == null && $dt->C04 == null && $dt->C07 == null)
                                         <td><p class="badge badge-warning">Nilai Belum Diinputkan GuruBK</p></td>
-                                    @elseif($result != 0 )
+                                    @else
                                         <td><p class="badge badge-success">Nilai Sudah Diinputkan GuruBK</p></td>
                                     @endif
-                                    {{-- @if ($dt->value == "Angka")
-                                    <td>
-                                    </td>
-                                    @elseif($dt->value =="Pilihan")
-                                    @endif --}}
-                                    @if ($dt['status'] == 0)
+
+                                    @if ($dt->status == 0)
                                         <td><p class="badge badge-warning">Belum Diverifikasi</p></td>
-                                    @elseif($dt['status'] == 1)
+                                    @elseif($dt->status == 1)
                                         <td><p class="badge badge-success">Sudah Diverifikasi</p></td>
                                     @endif
                                     <td>
-                                        <a href="{{route('LihatAlternatif',$dt['id'])}}">
-                                            <button type="button" class="btn btn-outline-warning btn-sm">Lihat</button>
+                                        <a href="{{route('LihatAlternatif',$dt->id)}}">
+                                            @if ($dt->C03 != null && $dt->C04 != null && $dt->C05 != null)
+                                                <button type="button" class="btn btn-outline-warning btn-sm">Update</button>
+                                            @else
+                                                <button type="button" class="btn btn-outline-primary btn-sm">Lihat</button>
+                                            @endif
                                         </a>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
-                                            data-target="#delete{{$dt['id']}}"
-                                            @if ($dt['status'] == 1)
-                                                disabled
-                                            @endif
-                                            >Hapus</button>
+                                            data-target="#delete{{$dt->id}}">Hapus</button>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
-                            {{-- <tfoot>
+                            <tfoot>
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>NISN</th>
-                                    <th>Minat</th>
-                                    @if (Auth()->user()->role == 2)
-                                    <th>Status</th>
-                                    @elseif(Auth()->user()->role == 1)
-                                    <th>Nilai Rapor</th>
-                                    <th>Test TPA</th>
-                                    <th>Psikotes</th>
-                                    <th>Prites</th>
-                                    <th>Wawancara</th>
-                                    <th>Rekomendasi</th>
-                                    @endif
+                                    <th>Validasi GuruBK</th>
+                                    <th>Verifikasi Data</th>
                                     <th>Aksi</th>
                                 </tr>
-                            </tfoot> --}}
+                            </tfoot>
                         </table>
                     </div>
                 </div>

@@ -11,7 +11,7 @@
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('AlternatifIndex') }}">Alternatif</a></li>
-                    <li class="breadcrumb-item active">Lihat</li>
+                    <li class="breadcrumb-item active">Update</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -28,11 +28,8 @@
                 <div class="card">
                     <!-- /.card-header -->
                     <div class="card-body">
-                        {{-- @php
-                            dd($data)
-                        @endphp --}}
                         <div class="card-body">
-                            <form class="needs-validation" novalidate="" action="{{route('UpdateAdmin',$data['id'])}}" method="POST">
+                            <form class="needs-validation" novalidate="" action="{{route('UpdateAlternatifGuru',$data['id'])}}" method="POST">
                                 {{ csrf_field() }}
                             <div class="form-group row">
                                 <label for="nama" class="col-sm-2 col-form-label">Nama Siswa</label>
@@ -60,6 +57,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                @php
+                                    // $dataip = json_decode($data['C02IPS']);
+                                    // dd($dataip->IPS1)
+                                @endphp
                                 <label for="nisn" class="col-sm-2 col-form-label">Nilai Rapor</label>
                                 <div class="row col-sm-10">
                                     <div class="form-group">
@@ -160,56 +161,48 @@
                             <div class="form-group row">
                                 <label for="nisn" class="col-sm-2 col-form-label">Test TPA</label>
                                 <div class="col-sm-10">
-                                    @if ($data['C03'] == null)
-                                        <input type="number" class="form-control"
-                                            required name="tpa">
-                                    @else
-                                        <input type="number" name="tpa" class="form-control"
-                                        value="{{ $data['C03'] }}">
-                                        @endif
+                                    @if($data['C03'] != null)
+                                    <input type="text" id="nisn" class="form-control"
+                                        name="testTPA" disabled  value="{{ $data['C03'] }}">
+                                        <div class="invalid-feedback">
+                                            Maaf Test TPA Tidak Boleh Kosong
+                                        </div>
+                                    @elseif($data['C03'] == null)
+                                        <input type="text" id="nisn" class="form-control"
+                                        value="" disabled>
+                                        <small class="form-text text-muted">Nilai Belum Diinputkan oleh Admin PPDB.</small>
+                                    @endif
                                 </div>
+
                             </div>
                             <div class="form-group row">
                                 <label for="nisn" class="col-sm-2 col-form-label">Psikologi</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" aria-label=".form-control example" name="psikologi" required>
-                                        @if ($data['C04'] != null)
-                                            @foreach ($pilihan as $p)
-                                                @if($p->kriteria == 5)
-                                                    @if ($data['C04'] == $p->id)
-                                                        <option value="{{$p->id}}" selected>{{$p->nilai_kriteria}}</option>
-                                                    @else
-                                                        <option value="{{$p->id}}">{{$p->nilai_kriteria}}</option>
-                                                    @endif
-                                                @endif
-                                            @endforeach
-                                        @else
-                                        <option>Pilih Rekomendasi Guru ... </option>
-                                        @foreach ($pilihan as $p)
-                                                @if($p->kriteria == 5)
-                                                <option value="{{$p->id}}">{{$p->nilai_kriteria}}</option>
-                                                @endif
-                                            @endforeach
+                                    @if ($data['C04'] != null)
+                                    @foreach ($pilihan as $p)
+                                        @if ($p->id == $data['C04'])
+                                            <input type="text" id="psikologi" class="form-control"
+                                                value="{{ $p->nilai_kriteria }}" disabled>
                                         @endif
-                                    </select>
+                                    @endforeach
+                                    @elseif($data['C04'] == null)
+                                        <input type="text" id="nisn" class="form-control"
+                                        value="" disabled>
+                                        <small class="form-text text-muted">Nilai Belum Diinputkan oleh Admin PPDB.</small>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="nisn" class="col-sm-2 col-form-label">PreTest/PostTest</label>
                                 <div class="col-sm-10">
-                                    @if ($data['C05'] == null)
-                                        <input type="number" id="nisn" class="form-control"
-                                            name="pretest" required>
-                                    @else
-                                        <input type="number" id="nisn" class="form-control"
-                                        value="{{ $data['C05'] }}" name="pretest">
-                                    @endif
+                                    <input type="number" id="nisn" class="form-control"
+                                        value="{{ $data['C05'] }}" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="nisn" class="col-sm-2 col-form-label">Wawancara</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" aria-label=".form-control example" name="wawancara" disabled>
+                                    <select class="form-control" aria-label=".form-control example" name="wawancara" required>
                                         <option>Pilih Rekomendasi Guru ... </option>
                                         @if ($data['C06'] != null)
                                             @foreach ($pilihan as $p)
@@ -222,20 +215,19 @@
                                                 @endif
                                             @endforeach
                                         @else
-                                            @foreach ($pilihan as $p)
-                                                @if($p->kriteria == 6)
-                                                    <option value="{{$p->id}}">{{$p->nilai_kriteria}}</option>
-                                                @endif
-                                            @endforeach
+                                        @foreach($pilihan as $p)
+                                            @if($p->kriteria == 6)
+                                                <option value="{{$p->id}}">{{$p->nilai_kriteria}}</option>
+                                            @endif
+                                        @endforeach
                                         @endif
                                     </select>
-
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="nisn" class="col-sm-2 col-form-label">Rekom Guru</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" aria-label=".form-control example" name="rekom" disabled>
+                                    <select class="form-control" aria-label=".form-control example" name="rekom" required>
                                         <option>Pilih Rekomendasi Guru ... </option>
                                         @if ($data['C07'] != null)
                                             @foreach ($pilihan as $p)
@@ -255,44 +247,17 @@
                                             @endforeach
                                         @endif
                                     </select>
-
                                 </div>
                             </div>
                             <div class="float-right">
-                                <button class="btn btn-primary" type="submit">Update Data Siswa</button>
-                            </form>
-                                <button type="submit" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#verifikasi"
-                                    @if ($data['status'] == 1)
-                                        disabled
-                                    @endif
-                                    >Verifikasi</button>
-                            </div>
-                            <div class="modal fade col-12" tabindex="-1" role="dialog" id="verifikasi">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Verifikasi Data Siswa</h5>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Apakah Data yang yang Diinputkan Sudah Sesuai?</p>
-                                            <p>Data siswa Atas nama <strong>{{ $data['nama'] }}</strong> akan
-                                                Dilanjutkan
-                                                Ke proses Selanjutnya?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="{{ route('VerifikasiAlternatif', $data['id']) }}">
-                                                <button class="btn btn-primary">Verifikasi</button>
-                                            </a>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Batal</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                @if ($data['C06'] == null && $data['C07'] == null)
+                                    <button type="submit" class="btn btn-primary">Simpan Data</button>
+                                @else
+                                    <button type="submit" class="btn btn-primary">Update Data Siswa</button>
+                                @endif
+                                <a href="{{ Route('AlternatifIndex') }}">
+                                    <button class="btn btn-secondary" type="button">Kembali Ke Halaman Sebelumnya</button>
+                                </a>
                             </div>
                             </form>
                         </div>
@@ -300,9 +265,5 @@
                 </div>
             </div>
         </div>
-
         @include('template/Footer')
-        @foreach ($data as $d)
-        @endforeach
-
         <script></script>

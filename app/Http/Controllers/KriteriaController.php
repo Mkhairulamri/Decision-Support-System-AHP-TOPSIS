@@ -83,10 +83,17 @@ class KriteriaController extends Controller
 
         // dd($matriks);
 
-        return view('PanitiaPPDB/Kriteria/Matriks/Matriks',[
-            'kriteria'=>$kriteria,
-            'matriks'=>$matriks
-        ]);
+        if(Auth()->user()->role == 1){
+            return view('PanitiaPPDB/Kriteria/Matriks/Matriks',[
+                'kriteria'=>$kriteria,
+                'matriks'=>$matriks
+            ]);
+        }else if(Auth()->user()->role ==2){
+            return view('GuruBk.Matriks',[
+                'kriteria'=>$kriteria,
+                'matriks'=>$matriks
+            ]);
+        }
     }
 
     function SimpanMatriksPanitia(Request $req){

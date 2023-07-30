@@ -4,13 +4,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data Kriteria Penilaian</h1>
+                <h1 class="m-0">Data Bobot Kriteria Tiap Jurusan</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="">Home</a></li>
-                    <li class="breadcrumb-item active">Data Kriteria</li>
+                    <li class="breadcrumb-item active">Data Bobot Jurusan</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -26,12 +26,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Kriteria</h3>
-                        <button class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#tambah_kriteria"><i class="fas fa-plus"></i>Tambah Keterangan Bobot</button>
+                        {{-- @if (auth()->user()->role == 1)
+                            <h3 class="card-title">Data Kriteria</h3>
+                            <button class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#tambah_kriteria"><i class="fas fa-plus"></i>Tambah Kriteria</button>
+                        @endif --}}
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        {{-- alert --}} @if ($message = Session::get('exist'))
+                        {{-- alert --}}
+                        @if ($message = Session::get('exist'))
                         <div class="alert alert-danger alert-dismissible show fade" role="alert">
                             <div class="alert-body">
                                 <button class="close" data-dismiss="alert">
@@ -65,30 +68,47 @@
                             <thead>
                                 <tr>
                                     <th style="width: 10px;">#</th>
-                                    <th>Kode Sub Nilai</th>
-                                    <th>Nama Sub Nilai Kriteria</th>
-                                    <th>Nama Kriteria</th>
-                                    <th style="width: 20%;">Aksi</th>
+                                    <th style="text-align:center">Kriteria</th>
+                                    <th style="text-align:center">Nama Bobot Kriteria</th>
+                                    <th style="text-align:center">Bobot IPA</th>
+                                    <th style="text-align:center">Bobot IPS</th>
+                                    @if (auth()->user()->role == 1)
+                                        <th style="text-align:center">Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $no = 1;
-                                // dd($subnilai);
+                                @php
+                                    $no = 1;
                                 @endphp
-
-                                @foreach ($subnilai as $sn)
+                                @foreach ($data as $data)
                                 <tr>
                                     <td>{{$no++}}</td>
-                                    <td>{{$sn->kode_subnilai}}</td>
-                                    <td class="text-capitalize">{{$sn->nama_sub_nilai}}</td>
-                                    <td>{{$sn->kriteria}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$sn->id}}">Edit</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$sn->id}}">Hapus</button>
+                                    <td>{{$data->kode_kriteria}}</td>
+                                    <td>{{$data->nama_bobot}}</td>
+                                    <td>{{$data->bobot_ipa}}</td>
+                                    <td>{{$data->bobot_ips}}</td>
+                                    @if (auth()->user()->role == 1)
+                                    <td style="text-align:center">
+                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$data->id}}">Edit</button>
+                                        {{-- <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$kriteria->id}}">Hapus</button> --}}
                                     </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th style="width: 10px;">#</th>
+                                    <th style="text-align:center">Kriteria</th>
+                                    <th style="text-align:center">Nama Bobot Kriteria</th>
+                                    <th style="text-align:center">Bobot IPA</th>
+                                    <th style="text-align:center">Bobot IPS</th>
+                                    @if (auth()->user()->role == 1)
+                                        <th style="text-align:center">Aksi</th>
+                                    @endif
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -102,44 +122,75 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Sub Nilai Kriteria Penilaian</h5>
+                <h5 class="modal-title">Tambah Kriteria Penilaian</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="needs-validation" novalidate="" action="{{route('SimpanSubNilai')}}" method="POST">
+                <form class="needs-validation" novalidate="" action="{{route('SaveKriteria')}}" method="POST">
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kode Sub Nilai</label>
+                            <label class="col-sm-3 col-form-label">Kode Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control text-uppercase" required="" name="kode"/>
+                                <input type="text" class="form-control" required="" name="kode" style="text-transform: uppercase"/>
                                 <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Nama Sub Kriteria</label>
+                            <label class="col-sm-3 col-form-label">Nama Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control text-capitalize" required="" name="nama"/>
+                                <input type="text" class="form-control" required="" name="nama" />
                                 <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kriteria</label>
-                            <div class="col-sm-9">
-                                <select class="form-control select2" style="width: 100%;" aria-label="Default select example" name="kriteria">
-                                    <option selected>Open this select menu</option>
-                                    @foreach ($kriteria as $item)
-                                        <option value="{{$item->kode_kriteria}}" name="kriteria">{{$item->kode_kriteria}} -- {{$item->nama_kriteria}}</option>
-                                    @endforeach
-                                </select>
+                            <label class="col-sm-3 col-form-label">Atribut</label>
+                            <div class="row mt-2 ml-2">
+                                <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="atribut" id="flexRadioDefault1" value="Cost" />
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Cost
+                                    </label>
+                                </div>
+                                <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="atribut" id="flexRadioDefault2" value="Benefit" />
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Benefit
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Value</label>
+                            <div class="row mt-2 ml-2">
+                                <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="value" id="flexRadioDefault1" value="Cost"/>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Angka
+                                    </label>
+                                </div>
+                                <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="value" id="flexRadioDefault2" value="Pilihan" />
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Pilihan
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="offset-sm-3 col-sm-10">
+                              <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck2" name="guru">
+                                <label class="form-check-label" for="exampleCheck2">Diinputkan Oleh Guru</label>
+                              </div>
+                            </div>
+                          </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Simpan Kriteria</button>
@@ -151,55 +202,39 @@
     </div>
 </div>
 
-@foreach($subnilai as $sn) {{-- Modal Edit --}}
+@foreach($data as $datas) {{-- Modal Edit --}}
 
-<div class="modal fade col-12" tabindex="-1" role="dialog" id="edit{{$sn->id}}">
+{{-- <div class="modal fade col-12" tabindex="-1" role="dialog" id="edit{{$datas->id}}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Panitia PPDB</h5>
+                <h5 class="modal-title">Edit Data Bobot Kriteria Jurusan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="needs-validation" novalidate="" action="{{route('UpdateSubNilai',$sn->id)}}" method="POST">
+                <form class="needs-validation" novalidate="" action="{{route('UpdateKriteria',$datas->id)}}" method="POST">
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kode Sub Kriteria</label>
+                            <label class="col-sm-3 col-form-label">Kode Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control text-uppercase" required="" name="kode" value="{{$sn->kode_subnilai}}"/>
-                                <div class="invalid-feedback" >
+                                <input type="text" class="form-control" required="" name="kode" value="{{$datas->kode_kriteria}}" style="text-transform: uppercase" disabled/>
+                                <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Nama Sub Kriteria</label>
+                            <label class="col-sm-3 col-form-label">Nama Bobot Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control text-capitalize" required="" name="nama" value="{{$sn->nama_sub_nilai}}"/>
-                                <div class="invalid-feedback" >
+                                <input type="text" class="form-control" required="" name="nama" value="{{$datas->nama_bobot}}"/>
+                                <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kriteria</label>
-                            <div class="col-sm-9">
-                                <select class="form-control select2" style="width: 100%;" aria-label="Default select example" name="kriteria">
-                                    <option selected>Open this select menu</option>
-                                    @foreach ($kriteria as $item)
-                                        <option value="{{$item->kode_kriteria}}" name="kriteria"
-                                            @if ($item->kode_kriteria == $sn->kriteria)
-                                                selected
-                                            @endif
-                                        >{{$item->kode_kriteria}} -- {{$item->nama_kriteria}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Update Kriteria</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -208,30 +243,30 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- Modal Hapus --}}
-<div class="modal fade col-12" tabindex="-1" role="dialog" id="delete{{$sn->id}}">
+{{-- <div class="modal fade col-12" tabindex="-1" role="dialog" id="delete{{$datas->id}}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Hapus Sub Nilai Kriteria</h5>
+                <h5 class="modal-title">Hapus Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Sub Nilai Kriteria akan Hapus </p>
-                <p>Apakah Anda Yakin akan Sub Nilai Krieria <strong class="text-capitalize">{{ucfirst($sn->nama_sub_nilai)}}</strong>?</p>
+                <p>SubKriteria Dan Bobot Matriks Akan ikut terhapus juga</p>
+                <p>Apakah Anda Yakin akan Menghapus User <strong>{{ucfirst($kriteria->nama_kriteria)}}</strong>?</p>
             </div>
             <div class="modal-footer">
-                <a href="{{route('HapusSubNilai',$sn->id)}}">
+                <a href="{{route('DeleteKriteria',$kriteria->id)}}">
                     <button class="btn btn-primary">Hapus</button>
                 </a>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endforeach
 
 

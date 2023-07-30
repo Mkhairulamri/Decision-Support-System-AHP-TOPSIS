@@ -56,9 +56,9 @@
               <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>{{$ranking}}</h3>
+                  <h3>{{$jurusan}}</h3>
 
-                  <p>Data Yang Belum Diranking</p>
+                  <p>Data Yang Belum Dapat Rekomendasi</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
@@ -78,7 +78,7 @@
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">Detail ... <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -99,7 +99,7 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2022 <a href="#">MAN 2 Kuantan Singingi</a>.</strong>
+    <strong>Copyright &copy; 2023 <a href="#">MAN 2 Kuantan Singingi</a>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1.1

@@ -26,10 +26,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        @if (auth()->user()->role == 1)
+                        {{-- @if (auth()->user()->role == 1)
                             <h3 class="card-title">Data Kriteria</h3>
                             <button class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#tambah_kriteria"><i class="fas fa-plus"></i>Tambah Kriteria</button>
-                        @endif
+                        @endif --}}
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -68,12 +68,12 @@
                             <thead>
                                 <tr>
                                     <th style="width: 10px;">#</th>
-                                    <th>Kode Kriteria</th>
-                                    <th>Nama Kriteria</th>
-                                    <th>Atribut</th>
-                                    <th>Bobot</th>
+                                    <th style="text-align:center">Kode Kriteria</th>
+                                    <th style="text-align:center">Nama Kriteria</th>
+                                    <th style="text-align:center">Atribut</th>
+                                    <th style="text-align:center">Bobot</th>
                                     @if (auth()->user()->role == 1)
-                                        <th style="width: 20%;">Aksi</th>
+                                        <th style="text-align:center">Aksi</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -84,12 +84,16 @@
                                     <td>{{$no++}}</td>
                                     <td>{{$kriteria->kode_kriteria}}</td>
                                     <td>{{$kriteria->nama_kriteria}}</td>
-                                    <td>{{$kriteria->atribut}} -- {{$kriteria->value}}</td>
+                                    <td>{{$kriteria->atribut}}</td>
                                     <td>{{$kriteria->bobot}}</td>
                                     @if (auth()->user()->role == 1)
-                                    <td>
-                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$kriteria->id}}">Edit</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$kriteria->id}}">Hapus</button>
+                                    <td style="text-align:center">
+                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$kriteria->id}}"
+                                            @if ($kriteria->nama_kriteria == "Nilai Rapor")
+                                                disabled
+                                            @endif
+                                        >Edit</button>
+                                        {{-- <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$kriteria->id}}">Hapus</button> --}}
                                     </td>
                                     @endif
                                 </tr>
@@ -211,7 +215,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Panitia PPDB</h5>
+                <h5 class="modal-title">Edit Data Kriteria</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -223,7 +227,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Kode Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" required="" name="kode" value="{{$kriteria->kode_kriteria}}" style="text-transform: uppercase" />
+                                <input type="text" class="form-control" required="" name="kode" value="{{$kriteria->kode_kriteria}}" style="text-transform: uppercase" disabled/>
                                 <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>
@@ -232,7 +236,11 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Nama Kriteria</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" required="" name="nama" value="{{$kriteria->nama_kriteria}}" />
+                                <input type="text" class="form-control" required="" name="nama" value="{{$kriteria->nama_kriteria}}"
+                                @if ($kriteria->nama_kriteria == "Nilai Rapor")
+                                    disabled
+                                @endif
+                                />
                                 <div class="invalid-feedback">
                                     Maaf Form Tidak Boleh Kosong
                                 </div>

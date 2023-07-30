@@ -86,38 +86,30 @@
                                 @foreach ($data as $key => $dt)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $dt['nama']}}</td>
+                                    <td>{{ $dt['nama'] ." - ". $dt['id']}}</td>
                                     <td>{{ $dt['nisn'] }}</td>
-                                    @php
-                                    $result = 0;
-                                    // dd($kriteria);
-                                    foreach ($kriteria as $kr) {
-                                        $test = $dt['data'];
-                                        // dd($test);
-                                        // if ($dt['data'][$kr->kode_kriteria] != null) {
-                                        //     $result++;
-                                        // }
-                                    }
-                                    @endphp
-                                    @if ($result == 0)
+
+                                    @if ($dt['C06'] == null && $dt['C07'] == null)
                                         <td><p class="badge badge-warning">Nilai Belum Diinputkan</p></td>
-                                    @elseif($result != 0 )
+                                    @else
                                         <td><p class="badge badge-success">Nilai Sudah Diinputkan</p></td>
                                     @endif
-                                    {{-- @if ($dt->value == "Angka")
-                                    <td>
-                                    </td>
-                                    @elseif($dt->value =="Pilihan")
-                                    @endif --}}
+
                                     @if ($dt['status'] == 0)
                                         <td><p class="badge badge-warning">Belum Diverifikasi</p></td>
                                     @elseif($dt['status'] == 1)
                                         <td><p class="badge badge-success">Sudah Diverifikasi</p></td>
                                     @endif
                                     <td>
-                                        <a href="{{route('LihatAlternatif',$dt['id'])}}">
+                                        @if ($dt['C06'] == null || $dt['C07'] == null)
+                                        <a href="{{route('UpdateAlternatif',$dt['id'])}}">
                                             <button type="button" class="btn btn-outline-primary btn-sm">Input Nilai</button>
                                         </a>
+                                        @else
+                                        <a href="{{route('UpdateAlternatif',$dt['id'])}}">
+                                            <button type="button" class="btn btn-outline-success btn-sm">Lihat Data</button>
+                                        </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -150,32 +142,6 @@
 </div>
 
 @include('template/Footer') {{-- modal Tambah Kategori --}}
-
-@foreach ($data as $d)
-<div class="modal fade col-12" tabindex="-1" role="dialog" id="delete{{$d['id']}}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Hapus Data Siswa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah Anda Yakin akan Menghapus Data siswa <strong>{{ucfirst($d['nama'])}}</strong> dengan NISN
-                    <strong>{{ucfirst($d['nisn'])}}</strong>?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="{{route('HapusAlternatif',$d['id'])}}">
-                    <button class="btn btn-primary">Hapus</button>
-                </a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@endforeach
 
 <script>
     $(function() {

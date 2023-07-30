@@ -9,6 +9,7 @@ use App\Http\Controllers\SubNilaiController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\GuessController;
+use App\Http\Controllers\BobotController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,20 +32,24 @@ Route::get('/login-view', function () {
 Route::post('/login',[AuthController::class,'Login'])->name('login');
 Route::get('/LupaPassword',[AuthController::class,'LupaPassword'])->name('LupaPassword');
 
-//Input Siswa
+//guess
 Route::get('/input-data',[AlternatifController::class,'InsertSiswa'])->name('InsertSiswa');
 Route::post('/alternatif/simpanSiswa',[AlternatifController::class,'SimpanSiswa'])->name('SimpanSiswa');
 Route::post('/cari-data',[GuessController::class,'CariData'])->name('CariData');
+Route::post('/detail-siswa/{id}',[GuessController::class,'DetailGuess'])->name('DetailGuess');
+Route::post('/edit-data/{id}',[GuessController::class,'EditGuess'])->name('EditGuess');
 
 //Akeses
 Route::middleware('RoleAccess:1'|'RoleAccess:2')->group(function(){
 
+    //Route Guru
     Route::get('/dashboard-guru',[UserController::class,'IndexGuru'])->name('DashboardGuru');
     Route::get('/data-panitia',[UserController::class,'getUser'])->name('DataPanitia');
     Route::post('/save-user',[UserController::class,'SaveUser'])->name('SaveUser');
     Route::post('/update-user/{id}',[UserController::class,'UpdateUser'])->name('UpdateUser');
     Route::get('/user/delete/{id}',[UserController::class,'DeleteUser'])->name('DeleteUser');
     Route::get('/dashboard-Panitia',[UserController::class,'DashboardPanitia'])->name('IndexPanitia');
+    Route::post('/input-siswa/{id}',[AlternatifController::class,'UpdateAlternatifGuru'])->name('UpdateAlternatifGuru');
 
     // kriteria Route
     Route::get('/kriteria',[KriteriaController::class,'Index'])->name('KriteriaIndex');
@@ -58,6 +63,9 @@ Route::middleware('RoleAccess:1'|'RoleAccess:2')->group(function(){
     Route::post('/sub-nilai/simpan',[SubNilaiController::class,'Simpan'])->name('SimpanSubNilai');
     Route::post('/sub-nilai/update/{id}',[SubNilaiController::class,'Update'])->name('UpdateSubNilai');
     Route::get('/sub-nilai/delete/{id}',[SubNilaiController::class,'Hapus'])->name('HapusSubNilai');
+
+    //BobotJurusan
+    Route::get('/bobot-jurusan',[BobotController::class,'index'])->name('BobotIndex');
 
     //Matriks Route
     Route::get('/matriks',[KriteriaController::class,'Matriks'])->name('MatriksIndex');
@@ -79,18 +87,18 @@ Route::middleware('RoleAccess:1'|'RoleAccess:2')->group(function(){
     Route::get('/alternatif',[AlternatifController::class,'Index'])->name('AlternatifIndex');
     Route::get('/alternatif/tambah',[AlternatifController::class,'Tambah'])->name('TambahAlternatif');
     Route::post('/alternatif/simpan',[AlternatifController::class,'Simpan'])->name('SimpanAlternatif');
+    Route::post('/alternatif/update-admin/{id}',[AlternatifController::class,'UpdateAdmin'])->name('UpdateAdmin');
     Route::get('/alternatif/verifikasi/{id}',[AlternatifController::class,'Verifikasi'])->name('VerifikasiAlternatif');
     Route::post('/alternatif/edit/{id}',[AlternatifController::class,'Edit'])->name('EditAlternatif');
-    Route::get('/alternatif/lihat/{id}',[AlternatifController::class,'Lihat'])->name('LihatAlternatif');
+    Route::get('/alternatif/lihat/{id}',[AlternatifController::class,'LihatAlternatif'])->name('LihatAlternatif');
     Route::get('/alternatif/hapus/{id}',[AlternatifController::class,'Hapus'])->name('HapusAlternatif');
+    Route::get('/alternatif/update/{id}',[AlternatifController::class,'UpdateAlternatif'])->name('UpdateAlternatif');
+    Route::get('/alternatif/matriks-keputusan',[AlternatifController::class,'MatriksKeputusan'])->name('MatriksKeputusan');
+    Route::get('/alternatif/matriks-normalisasi',[AlternatifController::class,'Normalisasi'])->name('alternatifSS');
+    Route::get('/alternatif/solusi-ideal',[AlternatifController::class,'SolusiIdeal'])->name('SolusiIdeal');
+    Route::get('/alternatif/preferensi',[AlternatifController::class,'Preferensi'])->name('Preferensi');
 
-    Route::get('/normalisasi',[AlternatifController::class,'Normalisasi'])->name('alternatifSS');
-
-    Route::get('/preferensi', function(){
-        return view('Mix/UntukSS/Preferensi');
-    })->name('Preferensi');
-
-    Route::geT('/alternatif-tambah',function(){
+    Route::get('/alternatif-tambah',function(){
         return view('Mix/Tambah');
     })->name('Tambah');
 });

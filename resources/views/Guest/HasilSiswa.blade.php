@@ -64,15 +64,25 @@
                                     Hasil yang didapatkan adalah {{$jumlah}}
                                 </h3>
                                 <p class="font-monospace text-center">{{$jumlah}} Hasil untuk Kata Kunci <span class="text-danger">{{$cari}} ... </span></p>
+                                @if ($hasil == 'failed')
+                                <div class="alert alert-danger alert-dismissible show fade" role="alert">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert">
+                                            <span>&times;</span>
+                                        </button>
+                                        {{$message}}
+                                    </div>
+                                </div>
+                                @endif
                                 <table class="table table-bordered mt-3"  id="bobotKriteria">
                                     <thead>
                                         <tr>
                                             <th style="width: 10px;">#</th>
-                                            <th>Nama</th>
-                                            <th>NISN</th>
-                                            <th>Inputan</th>
-                                            <th>Hasil</th>
-                                            <th class="d-flex justify-content-center">Aksi</th>
+                                            <th class="text-center">Nama</th>
+                                            <th class="text-center">NISN</th>
+                                            <th class="text-center">Inputan</th>
+                                            <th class="text-center">Hasil</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -88,13 +98,59 @@
                                             </td>
                                             @else
                                             <td>
-                                                <p class="badge badge-primary">Hasil Sudah Didaprkan</p>
+                                                <p class="badge badge-primary">Hasil Sudah Didapatkan</p>
                                             </td>
                                             @endif
                                             <td>
-                                                <button type="button" class="btn btn-outline-warning btn-sm" href="#">Lihat Data</button>
-                                            </td>
-                                        </tr>
+                                                <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#verifikasi">Lihat Data</button>
+                                                {{-- <a href="{{route('DetailGuess',$dt->id)}}">
+                                                </a> --}}
+                                                <div class="modal fade col-12" tabindex="-1" role="dialog" id="verifikasi">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Verifikasi Data Siswa</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Silahkan input Tanggal Lahir dan NISN Anda</p>
+                                                            <form class="needs-validation" novalidate="" action="{{route('DetailGuess',$dt->id)}}" method="POST">
+                                                                {{ csrf_field() }}
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-3 col-form-label">NISN</label>
+                                                                    <div class="col-sm-9">
+                                                                        <input type="number" class="form-control" required="" name="nisn"/>
+                                                                        <div class="invalid-feedback">
+                                                                            Maaf Form Tidak Boleh Kosong
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
+                                                                    <div class="col-sm-9">
+                                                                        <input type="date" class="form-control" required="" name="tgl_lahir" max="2013-12-25"/>
+                                                                        <div class="invalid-feedback">
+                                                                            Maaf Form Tidak Boleh Kosong
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <input type="hidden"value="{{$cari}}" name="cari">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Verifikasi</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Batal</button>
+                                                        </div>
+                                                    </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -127,6 +183,10 @@
     <!-- ./wrapper -->
 
     <script>
+
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementsByName("tgl_lahir")[0].setAttribute('max', today);
+
         $("#bobotKriteria").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false
             // "buttons": ["copy","excel", "pdf", "print", "colvis"]
