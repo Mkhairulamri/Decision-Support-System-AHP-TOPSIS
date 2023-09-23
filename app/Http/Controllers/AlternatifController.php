@@ -16,12 +16,12 @@ class AlternatifController extends Controller
     //Halaman Data Siswa Admin
     function Index(){
 
-        $kriteria = Kriteria::get()->sortBy('kode_kriteria')->where('is_guru',1);
-        $subnilai = subnilai::get()->sortBy('kode_sub_nilai');
+        $kriteria = Kriteria::get()->where('is_guru',1);
+        $subnilai = subnilai::get();
         $nilaikriteria = NilaiKriteria::get();
 
         // $data = $this->jsonConvert();
-        $data = Alternatif::get()->sortBy('created_at');
+        $data = Alternatif::orderBy('updated_at','DESC')->get()->all();
 
         // dd($data);
 
@@ -42,7 +42,6 @@ class AlternatifController extends Controller
                 'nilai'=>$nilaikriteria
             ]);
         }
-
     }
 
     //View Input Data dari Siswa
@@ -70,7 +69,7 @@ class AlternatifController extends Controller
         ]);
     }
 
-    //Simpan Data siswa dari Guest
+    //Simpan Data siswa dari siswa
     function SimpanSiswa(Request $req){
 
         // dd($req->all());
@@ -119,9 +118,9 @@ class AlternatifController extends Controller
         if($req != null){
             try{
                 $alternatif->save();
-                return redirect()->route('Index')->with('sukses', 'Data Alternatif Berhasil Ditambahkan');
+                return redirect()->route('Index')->with('sukses', 'Data Alternatif Berhasil Ditambahkan, Silahkan Tunggu Proses Rekomendasi Dari Sistem');
             }catch(\Exception $err){
-                return back()->with('sukses', 'Data Alternatif Berhasil Ditambahkan ');
+                return back()->with('failed', 'Error Penyimpanan Data Alternatif'. $alternatif->nama);
             }
         }else{
             return back()->with('failed','Data Anda Belum Lengkap silahkan Dilengkapi');
@@ -934,6 +933,7 @@ class AlternatifController extends Controller
         // dd($data);
         $newData =[];
         foreach($data as $key => $dt){
+            $newData[$key]['id'] = $dt['id'];
             $newData[$key]['nama'] = $dt['nama'];
             $newData[$key]['nisn'] = $dt['nisn'];
             $newData[$key]['jurusan'] = $dt['jurusan'];
@@ -953,6 +953,7 @@ class AlternatifController extends Controller
         $newData=[];
 
         foreach($ipa as $key=>$dt){
+            $newData[$key]['id'] = $dt['id'];
             $newData[$key]['nama'] = $dt['nama'];
             $newData[$key]['nisn'] = $dt['nisn'];
             $newData[$key]['jurusan'] = $dt['jurusan'];
@@ -968,5 +969,39 @@ class AlternatifController extends Controller
         }
 
         return $newData;
+    }
+
+    function SimpanRekonAlternatif(){
+        $data = $this->matriksNormalisasi();
+        $normipa = $this->matriksNormalisasiIPA($data);
+        $normips = $this->matriksNormalisasiIPS($data);
+        $minMaxIPA = $this->positifNegatif($normipa);
+        $minMaxIPS = $this->positifNegatif($normips);
+        $ipa = $this->solusiPositifNegatif($minMaxIPA);
+        $ips = $this->solusiPositifNegatif($minMaxIPS);
+        $solusiIPA = $this->jarakSolusiIdeal($normipa, $ipa);
+        $solusiIPS = $this->jarakSolusiIdeal($normipa, $ips);
+        $prefipa = $this->preferensiJurusan($solusiIPA);
+        $prefips = $this->preferensiJurusan($solusiIPS);
+        $prefAkhir = $this->preferensiAkhir($prefips, $prefipa);
+
+        // dd($prefAkhir);
+        $count = 0;
+
+        foreach($prefAkhir as $p){
+            $rekom = Alternatif::findOrFail($p['id']);
+
+            $rekom->jurusan = $p['rekom'];
+            $rekom->update();
+            $count ++;
+        }
+
+        if($count == count($prefAkhir)){
+            return back()->with('sukses', 'Rekomendasi Siswa berhasil ditambahkan');
+        }else if($count < count($prefAkhir)){
+            return back()->with('undone', 'Data Alternatif gagal di update Semua');
+        }else{
+            return back()->with('failed', 'Error update Data Rekomendasi');
+        }
     }
 }

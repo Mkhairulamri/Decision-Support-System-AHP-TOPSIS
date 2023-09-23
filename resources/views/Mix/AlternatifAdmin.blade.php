@@ -73,8 +73,10 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>NISN</th>
+                                    <th>Tanggal lahir</th>
                                     <th>Validasi GuruBK</th>
                                     <th>Verifikasi Data</th>
+                                    <th>Update</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -88,11 +90,11 @@
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $dt->nama }}</td>
                                     <td>{{ $dt->nisn }}</td>
-
-                                    @if ($dt->C03 == null && $dt->C04 == null && $dt->C07 == null)
-                                        <td><p class="badge badge-warning">Nilai Belum Diinputkan GuruBK</p></td>
+                                    <td>{{ date("d-M-Y", strtotime($dt->tgl_lahir))}}</td>
+                                    @if ($dt->C06 == null && $dt->C07 == null)
+                                        <td><p class="badge badge-warning">Belum Diinputkan</p></td>
                                     @else
-                                        <td><p class="badge badge-success">Nilai Sudah Diinputkan GuruBK</p></td>
+                                        <td><p class="badge badge-success">Sudah Diinputkan</p></td>
                                     @endif
 
                                     @if ($dt->status == 0)
@@ -100,6 +102,7 @@
                                     @elseif($dt->status == 1)
                                         <td><p class="badge badge-success">Sudah Diverifikasi</p></td>
                                     @endif
+                                    <td>{{ date("d-M-Y", strtotime($dt->updated_at))}}</td>
                                     <td>
                                         <a href="{{route('LihatAlternatif',$dt->id)}}">
                                             @if ($dt->C03 != null && $dt->C04 != null && $dt->C05 != null)
@@ -119,8 +122,10 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>NISN</th>
+                                    <th>Tanggal lahir</th>
                                     <th>Validasi GuruBK</th>
                                     <th>Verifikasi Data</th>
+                                    <th>Update</th>
                                     <th>Aksi</th>
                                 </tr>
                             </tfoot>
@@ -172,8 +177,7 @@
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
-            "ordering": true,
+            "searching": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,

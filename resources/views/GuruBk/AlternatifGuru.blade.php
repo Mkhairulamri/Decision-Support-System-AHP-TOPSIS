@@ -86,9 +86,8 @@
                                 @foreach ($data as $key => $dt)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $dt['nama'] ." - ". $dt['id']}}</td>
+                                    <td>{{ $dt['nama']}}</td>
                                     <td>{{ $dt['nisn'] }}</td>
-
                                     @if ($dt['C06'] == null && $dt['C07'] == null)
                                         <td><p class="badge badge-warning">Nilai Belum Diinputkan</p></td>
                                     @else

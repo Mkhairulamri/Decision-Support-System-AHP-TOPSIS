@@ -46,6 +46,9 @@
 
       <div class="social-auth-links text-center mb-3">
         <p>- - - - - -</p>
+        <div class="text-center">
+            <a href="{{route('index')}}">Kembali Ke Halaman Sebelumnya</a>
+        </div>
       </div>
       <!-- /.social-auth-links -->
 

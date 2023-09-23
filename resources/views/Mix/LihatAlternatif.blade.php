@@ -261,7 +261,7 @@
                             <div class="float-right">
                                 <button class="btn btn-primary" type="submit">Update Data Siswa</button>
                             </form>
-                                <button type="submit" class="btn btn-primary" data-toggle="modal"
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#verifikasi"
                                     @if ($data['status'] == 1)
                                         disabled
@@ -302,7 +302,8 @@
         </div>
 
         @include('template/Footer')
-        @foreach ($data as $d)
-        @endforeach
+        <script>
 
-        <script></script>
+<!-- Bootstrap 4 -->
+<script src="{{asset('admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        </script>

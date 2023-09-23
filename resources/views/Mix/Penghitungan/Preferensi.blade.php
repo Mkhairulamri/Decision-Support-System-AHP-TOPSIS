@@ -37,6 +37,37 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                   <div class="tab-content">
+                    @if ($message = Session::get('sukses'))
+                        <div class="alert alert-success alert-dismissible show fade" role="alert">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                {{ $message }}
+                            </div>
+                        </div>
+                        @endif
+                        @if ($message = Session::get('undone'))
+                        <div class="alert alert-warning alert-dismissible show fade" role="alert">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                {{ $message }}
+                            </div>
+                        </div>
+                        @endif
+
+                        @if ($message = Session::get('failed'))
+                        <div class="alert alert-danger alert-dismissible show fade" role="alert">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                {{ $message }}
+                            </div>
+                        </div>
+                        @endif
                     <div class="tab-pane" id="tab_1">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -176,6 +207,10 @@
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane active" id="tab_3">
+                        <div>
+                            <a href="{{route('SimpanRekonAlternatif')}}" class="btn btn-outline-primary" style="{margin-top:-20px}"><i class="fas fa-plus"></i> Update Rekom Jurusan</a>
+                        </div>
+                        <div class="mt-3">
                         <table id="example2" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -221,6 +256,7 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                     <!-- /.tab-pane -->
                   </div>

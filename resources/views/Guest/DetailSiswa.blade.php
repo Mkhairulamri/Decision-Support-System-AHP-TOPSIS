@@ -77,13 +77,17 @@
                                 </div>
                                 <div class="col-6" style=" align-items:center; justify-content:center;">
                                     @if($data['jurusan'] != null)
-                                    <div style="margin-left: 100px; width:300px; height:200px; background-color: #e6dfdf; display:flex; justify-content:center; align-items:center; border-radius:20px;">
-                                            <H1 class="text-center" style="magin-left:30px; justify-content: center; color : #ff0000; font-size:100px">{{$data['jurusan']}}</H1>
-                                    </div>
-                                            <p class="text-center">Adalah Rekomendasi Jurusan yang telah Diproses oleh Sistem</p>
+                                        @if($data['jurusan'] == 'IPA')
+                                            <img src="{{asset ('asset/img/IPA.jpg')}}" alt="IPA" style="width: 200px; height:200px; margin-left:100px">
+                                        @elseif($data['jurusan'] == 'IPS')
+                                            <img src="{{asset ('asset/img/IPS.jpg')}}" alt="IPS" style="width: 200px; height:200px; margin-left:100px">
                                         @else
-                                            <img src="{{asset('asset/img/belum.png')}}" alt="belum" style="width:200px; height:200px; border-radius:15px; align-items:center">
-                                            <p class="text-center">Belum Ada rekomendasi Sistem terhadap Nama yang Tertera, Silahkan Hubungi Admin PPDB</p>
+                                            <p class="text-center text-warning border border-danger">Nilai Rekomendasi Berbeda dari Seharusnya, <br>Silahkan Hubungi Admin PPDB</p>
+                                        @endif
+                                    @else
+                                            {{-- <img src="{{asset('asset/img/belum.png')}}" alt="belum" style="width:200px; height:200px; border-radius:15px; margin-right:30%;align-items:center"> --}}
+                                            <br>
+                                            <p class="text-center text-warning border border-danger">Belum Ada rekomendasi Sistem terhadap Nama yang Tertera, <br>Silahkan Hubungi Admin PPDB</p>
                                         @endif
                                 </div>
                             </div>
@@ -215,8 +219,14 @@
                             <div class="form-group row">
                                 <label for="nisn" class="col-sm-2 col-form-label">PreTest/PostTest</label>
                                 <div class="col-sm-10">
+                                @if ($data['C05'] != null)
                                     <input type="number" id="nisn" class="form-control"
                                         value="{{ $data['C05'] }}" disabled>
+                                @elseif($data['C05'] == null)
+                                    <input type="text" id="nisn" class="form-control"
+                                    value="" disabled>
+                                    <small class="form-text text-muted">Nilai Belum Diinputkan Oleh Guru BK.</small>
+                                @endif
                                 </div>
                             </div>
                             <div class="form-group row">

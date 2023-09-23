@@ -10,6 +10,7 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\GuessController;
 use App\Http\Controllers\BobotController;
+use App\Models\Alternatif;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,8 @@ Route::middleware('RoleAccess:1'|'RoleAccess:2')->group(function(){
     Route::get('/alternatif/matriks-normalisasi',[AlternatifController::class,'Normalisasi'])->name('alternatifSS');
     Route::get('/alternatif/solusi-ideal',[AlternatifController::class,'SolusiIdeal'])->name('SolusiIdeal');
     Route::get('/alternatif/preferensi',[AlternatifController::class,'Preferensi'])->name('Preferensi');
+
+    Route::get('/alternatif/updateRekom',[AlternatifController::class,'SimpanRekonAlternatif'])->name('SimpanRekonAlternatif');
 
     Route::get('/alternatif-tambah',function(){
         return view('Mix/Tambah');

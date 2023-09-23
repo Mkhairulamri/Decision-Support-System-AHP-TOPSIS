@@ -90,8 +90,6 @@
                                     <td style="text-align:center">
                                         <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$kriteria->id}}"
                                             @if ($kriteria->nama_kriteria == "Nilai Rapor")
-                                                disabled
-                                            @endif
                                         >Edit</button>
                                         {{-- <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$kriteria->id}}">Hapus</button> --}}
                                     </td>
