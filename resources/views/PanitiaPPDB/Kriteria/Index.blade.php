@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         @endif {{-- Tabel data panitia --}}
-                        <table class="table table-bordered" id="tabel-1">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 10px;">#</th>
@@ -72,13 +72,13 @@
                                     <th style="text-align:center">Nama Kriteria</th>
                                     <th style="text-align:center">Atribut</th>
                                     <th style="text-align:center">Bobot</th>
-                                    @if (auth()->user()->role == 1)
-                                        <th style="text-align:center">Aksi</th>
-                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $no = 1; @endphp
+                                @php
+                                    $no = 1;
+                                    // dd($kriterias);
+                                @endphp
                                 @foreach ($kriterias as $kriteria)
                                 <tr>
                                     <td>{{$no++}}</td>
@@ -86,14 +86,6 @@
                                     <td>{{$kriteria->nama_kriteria}}</td>
                                     <td>{{$kriteria->atribut}}</td>
                                     <td>{{$kriteria->bobot}}</td>
-                                    @if (auth()->user()->role == 1)
-                                    <td style="text-align:center">
-                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#edit{{$kriteria->id}}"
-                                            @if ($kriteria->nama_kriteria == "Nilai Rapor")
-                                        >Edit</button>
-                                        {{-- <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{$kriteria->id}}">Hapus</button> --}}
-                                    </td>
-                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -108,10 +100,6 @@
                                         }
                                     @endphp
                                     <td>{{$jumlah}}</td>
-
-                                    @if (auth()->user()->role == 1)
-                                        <td>Aksi</td>
-                                    @endif
                                 </tr>
                             </tfoot>
                         </table>
@@ -207,129 +195,7 @@
     </div>
 </div>
 
-@foreach($kriterias as $kriteria) {{-- Modal Edit --}}
 
-<div class="modal fade col-12" tabindex="-1" role="dialog" id="edit{{$kriteria->id}}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Data Kriteria</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="needs-validation" novalidate="" action="{{route('UpdateKriteria',$kriteria->id)}}" method="POST">
-                    {{ csrf_field() }}
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kode Kriteria</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" required="" name="kode" value="{{$kriteria->kode_kriteria}}" style="text-transform: uppercase" disabled/>
-                                <div class="invalid-feedback">
-                                    Maaf Form Tidak Boleh Kosong
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Nama Kriteria</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" required="" name="nama" value="{{$kriteria->nama_kriteria}}"
-                                @if ($kriteria->nama_kriteria == "Nilai Rapor")
-                                    disabled
-                                @endif
-                                />
-                                <div class="invalid-feedback">
-                                    Maaf Form Tidak Boleh Kosong
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Atribut</label>
-                            <div class="row mt-2 ml-2">
-                                <div class="form-check col">
-                                    <input class="form-check-input" type="radio" name="atribut" id="flexRadioDefault1" value="Cost"
-                                    @if ($kriteria->atribut == 'Cost')
-                                        checked
-                                    @endif
-                                     />
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Cost
-                                    </label>
-                                </div>
-                                <div class="form-check col">
-                                    <input class="form-check-input" type="radio" name="atribut" id="flexRadioDefault2" value="Benefit"
-                                    @if ($kriteria->atribut == 'Benefit')
-                                     checked
-                                     @endif
-                                      />
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Benefit
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Value</label>
-                                    <div class="row mt-2 ml-2">
-                                        <div class="form-check col">
-                                            <input class="form-check-input" type="radio" name="value" id="flexRadioDefault1" value="Angka"
-                                            @if ($kriteria->value == 'Angka')
-                                                checked
-                                            @endif
-                                            />
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                Angka
-                                            </label>
-                                        </div>
-                                        <div class="form-check col">
-                                            <input class="form-check-input" type="radio" name="value" id="flexRadioDefault2" value="Pilihan"
-                                            @if ($kriteria->value == 'Pilihan')
-                                                checked
-                                            @endif
-                                            />
-                                            <label class="form-check-label" for="flexRadioDefault2">
-                                                Pilihan
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Update Kriteria</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-{{-- Modal Hapus --}}
-<div class="modal fade col-12" tabindex="-1" role="dialog" id="delete{{$kriteria->id}}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Hapus Kategori</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>SubKriteria Dan Bobot Matriks Akan ikut terhapus juga</p>
-                <p>Apakah Anda Yakin akan Menghapus User <strong>{{ucfirst($kriteria->nama_kriteria)}}</strong>?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="{{route('DeleteKriteria',$kriteria->id)}}">
-                    <button class="btn btn-primary">Hapus</button>
-                </a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
 
 
 <script>

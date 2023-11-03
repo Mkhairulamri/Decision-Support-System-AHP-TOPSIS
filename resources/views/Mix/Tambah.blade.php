@@ -28,7 +28,7 @@
                 <div class="card">
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form class="form-horizontal needs-validation" novalidate action="{{ route('SimpanSiswa') }}"
+                        <form class="form-horizontal needs-validation" novalidate action="{{ route('SimpanAlternatif') }}"
                             method="POST">
                             {{ csrf_field() }}
                             <div class="card-body">
@@ -86,7 +86,7 @@
                                                 @for ($i = 1; $i<=4;$i++ )
                                                     <div class="form-group  col-sm-3">
                                                         <input type="number" class="form-control"
-                                                            name="bind{{$i}}" placeholder="B. Indonesia Semester {{$i}}" required="">
+                                                            name="BIND{{$i}}" placeholder="B. Indonesia Semester {{$i}}" required="">
                                                             <div class="invalid-feedback">
                                                                 Maaf B.Indonesia Sem {{$i}} Tidak Boleh Kosong
                                                             </div>
@@ -102,7 +102,7 @@
                                                 @for ($i = 1; $i<=4;$i++ )
                                                     <div class="form-group  col-sm-3">
                                                         <input type="number" class="form-control"
-                                                            name="bing{{$i}}" placeholder="B. Inggriss Semester {{$i}}" required="">
+                                                            name="BING{{$i}}" placeholder="B. Inggriss Semester {{$i}}" required="">
                                                             <div class="invalid-feedback">
                                                                 Maaf B.Inggris Sem {{$i}} Tidak Boleh Kosong
                                                             </div>
@@ -118,7 +118,7 @@
                                                 @for ($i = 1; $i<=4;$i++ )
                                                     <div class="form-group  col-sm-3">
                                                         <input type="number" class="form-control"
-                                                            name="ipa{{$i}}" placeholder="IPA Semester {{$i}}"required="">
+                                                            name="IPA{{$i}}" placeholder="IPA Semester {{$i}}"required="">
                                                             <div class="invalid-feedback">
                                                                 Maaf IPA Sem {{$i}} Tidak Boleh Kosong
                                                             </div>
@@ -134,7 +134,7 @@
                                                 @for ($i = 1; $i<=4;$i++ )
                                                     <div class="form-group  col-sm-3">
                                                         <input type="number" class="form-control"
-                                                            name="ips{{$i}}" placeholder="IPS Semester {{$i}}" required="">
+                                                            name="IPS{{$i}}" placeholder="IPS Semester {{$i}}" required="">
                                                             <div class="invalid-feedback">
                                                                 Maaf IPS Sem {{$i}} Tidak Boleh Kosong
                                                             </div>
@@ -150,7 +150,7 @@
                                                 @for ($i = 1; $i<=4;$i++ )
                                                     <div class="form-group  col-sm-3">
                                                         <input type="number" class="form-control"
-                                                            name="mtk{{$i}}" placeholder="Matematika Semster {{$i}}" required="">
+                                                            name="MTK{{$i}}" placeholder="Matematika Semster {{$i}}" required="">
                                                             <div class="invalid-feedback">
                                                                 Maaf MTK Sem {{$i}} Tidak Boleh Kosong
                                                             </div>

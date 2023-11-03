@@ -115,7 +115,7 @@ class AlternatifController extends Controller
         $alternatif->status = 0;
 
         // dd($alternatif);
-        if($req != null){
+        if($alternatif != null){
             try{
                 $alternatif->save();
                 return redirect()->route('Index')->with('sukses', 'Data Alternatif Berhasil Ditambahkan, Silahkan Tunggu Proses Rekomendasi Dari Sistem');
@@ -148,35 +148,51 @@ class AlternatifController extends Controller
 
         $subnilai = subnilai::get()->sortBy('nama_sub_nilai');
 
-        $kriteria = Kriteria::get()
-                    ->sortBy('value')
-                    ->sortBy('kode_kriteria');
+        $dataipa = [];
+        $dataips = [];
+        $databind = [];
+        $databing = [];
+        $datamtk = [];
 
-        $data = [];
-
-        foreach($kriteria as $k){
-            if($subnilai->where('kriteria',$k->kode_kriteria)->first()){
-                foreach($subnilai as $sn){
-                    if($k->kode_kriteria == $sn->kriteria){
-                        $data[$k->kode_kriteria][$sn->kode_subnilai] = $req[$k->kode_kriteria][$sn->kode_subnilai];
-                    }else{
-                        $data[$k->kode_kriteria] = $req[$k->kode_kriteria];
-                    }
-                }
-            }else{
-                $data[$k->kode_kriteria] = $req[$k->kode_kriteria];
+        foreach($subnilai as $sn){
+            if($sn->pelajaran == 'IPA'){
+                $ipa = $sn->kode_subnilai;
+                $dataipa[$sn->kode_subnilai] = $req->$ipa;
+            }elseif($sn->pelajaran == 'IPS'){
+                $ips = $sn->kode_subnilai;
+                $dataips[$sn->kode_subnilai] = $req->$ips;
+            }elseif($sn->pelajaran == 'BIND'){
+                $bind = $sn->kode_subnilai;
+                $databind[$sn->kode_subnilai] = $req->$bind;
+            }elseif($sn->pelajaran == 'BING'){
+                $bing = $sn->kode_subnilai;
+                $databing[$sn->kode_subnilai] = $req->$bing;
+            }elseif($sn->pelajaran == 'MTK'){
+                $mtk = $sn->kode_subnilai;
+                $datamtk[$sn->kode_subnilai] = $req->$mtk;
             }
         }
 
         // dd($req->all());
+
         $alternatif = new Alternatif;
         $alternatif->nama = $req->nama;
         $alternatif->nisn = $req->nisn;
         $alternatif->tgl_lahir = $req->tgl_lahir;
-        $alternatif->data = json_encode($data);
-        // dd($alternatif->data);
+        $alternatif->C01 = $req->minat;
+        $alternatif->C02IPA = json_encode($dataipa);
+        $alternatif->C02IPs = json_encode($dataips);
+        $alternatif->C02BING = json_encode($databing);
+        $alternatif->C02BIND = json_encode($databind);
+        $alternatif->C02MTK = json_encode($datamtk);
+        $alternatif->C03 = $req->tpa;
+        $alternatif->C04 = $req->psikologi;
+        $alternatif->C05 = $req->pretest;
+        $alternatif->status = 0;
 
-        if($data != null){
+        // dd($alternatif);
+
+        if($alternatif != null){
             try{
                 $alternatif->save();
                 return redirect()->route('AlternatifIndex')->with('sukses', 'Data Alternatif Berhasil Ditambahkan');
@@ -186,7 +202,6 @@ class AlternatifController extends Controller
         }else{
             return back()->with('failed','Data Anda Belum Lengkap silahkan DIlengkapi');
         }
-
     }
 
     function Edit(Request $req, $id){
